@@ -33,7 +33,7 @@ int main(void) {
 
 void menu() {
     bool play = true;
-    int scelta = 0;
+    int scelta = 1;
 
     while(play) {
         printf("\nBenvenuto!\n\n");
@@ -42,13 +42,13 @@ void menu() {
         printf("2 - AI\n");
         printf("3 - Quit");
         printf("\nScelta: ");
-        
+///*
         scanf("%d", &scelta);
-
         while(scelta < 1 || scelta > 3) {
             printf("\nInserire una scelta valida: ");
             scanf("%d", &scelta);
         }
+//*/
 
         switch(scelta) {
             case 1:
@@ -71,11 +71,13 @@ void soloGame() {
     int n = 5;
     bool fine = false;
     node* field = NULL;
-
+// /*
     do {
         printf("\nScegliere il numero di tessere: ");
         scanf("%d",&n);
     } while(n<=0);
+// */
+
     node* head = createHand(n);
 
     printf("\nLa tua mano:");
@@ -84,7 +86,7 @@ void soloGame() {
     while(!fine) {
         printField(field);
         makeMove(field, head);
-
+    // continuare
     }
 
 }
@@ -156,8 +158,10 @@ void makeMove(node* field, node* hand) {
 
 tessera printFancyHand(node* hand) {
     int n = 0;
+    // n = 2;
     int count = 0;
     tessera t;
+    node* head = hand;
 
     printf("\nScegli la tessera che vuoi giocare");
 
@@ -167,13 +171,15 @@ tessera printFancyHand(node* hand) {
         hand = hand->next;
     }
     printf("\nScelta: ");
+///*
     scanf("%d",&n);
     while(n<1 || n>count) {
         printf("Inserire un valore valido: ");
         scanf("%d", &n);
     }
+//*/
 
-    t = removeTessera(hand, n);
+    t = removeTessera(head, n);
 
     return t;
 }
