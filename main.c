@@ -126,13 +126,13 @@ tessera removeTessera(node* hand, int n) {
         return t;
     }
 
-    node* head = hand;
+    //node* head = hand;
     for(int i = 1; i<n; i++) {
         hand = hand->next;
     }
     tessera t = hand->next->me;
     hand->next = hand->next->next;
-    hand = head;
+    //hand = head;
     return t;
 
 }
