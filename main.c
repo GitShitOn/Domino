@@ -86,7 +86,7 @@ void soloGame() {
 
     node* head = createHand(n);
 
-    printf("\nLa tua mano:");
+    printf("\n\nLa tua mano:");
     printHand(head);
 
     int count = 10;
@@ -136,7 +136,7 @@ tessera removeTessera(node* hand, int n) {
         if(hand->next != NULL)
             *hand = *hand->next;
         else
-            hand = NULL;
+            // Settare *hand a NULL
         return t;
     }
 
@@ -185,10 +185,10 @@ tessera playerMove(node* hand) {
 
     printf("\nScegli la tessera che vuoi giocare");
 
-    while(hand != NULL) {
+    while(head != NULL) {
         count++;
-        printf("\n%d - [%d|%d]", count, hand->me.l_cell, hand->me.r_cell);
-        hand = hand->next;
+        printf("\n%d - [%d|%d]", count, head->me.l_cell, head->me.r_cell);
+        head = head->next;
     }
     printf("\nScelta: ");
 /*
@@ -199,7 +199,7 @@ tessera playerMove(node* hand) {
     }
 */
 
-    t = removeTessera(&head, n);
+    t = removeTessera(hand, n);
 
     return t;
 }
