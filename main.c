@@ -16,13 +16,14 @@ typedef struct nod{
 void menu(void);
 void soloGame();
 void printHand(node*);
-tessera printFancyHand(node*);
 void printField(node*);
 void makeMove(node*, node*);
 node* createHand(int);
+tessera playerMove(node*);
 tessera createTessera();
 tessera removeTessera(node*, int);
 
+// Main
 int main(void) {
 
     srand(time(NULL));
@@ -31,6 +32,7 @@ int main(void) {
     return 0;
 }
 
+// Funzione che serve da menu e dalla quale si avviano le partite
 void menu() {
     bool play = true;
     int scelta = 1;
@@ -42,17 +44,20 @@ void menu() {
         printf("2 - AI\n");
         printf("3 - Quit");
         printf("\nScelta: ");
-///*
+/*
         scanf("%d", &scelta);
         while(scelta < 1 || scelta > 3) {
             printf("\nInserire una scelta valida: ");
             scanf("%d", &scelta);
         }
-//*/
+*/
 
         switch(scelta) {
             case 1:
                 soloGame();
+
+                scelta = 3; //modificare, solo per debug
+
                 break;
             case 2:
                 break;
@@ -67,30 +72,34 @@ void menu() {
     }
 }
 
+// Funzione per la gestione di una partita in solo
 void soloGame() {
     int n = 5;
     bool fine = false;
     node* field = NULL;
-// /*
+/*
     do {
         printf("\nScegliere il numero di tessere: ");
         scanf("%d",&n);
     } while(n<=0);
-// */
+*/
 
     node* head = createHand(n);
 
     printf("\nLa tua mano:");
     printHand(head);
 
-    while(!fine) {
+    int count = 10;
+    while(!fine && count > 0) {
         printField(field);
         makeMove(field, head);
+        count--;
     // continuare
     }
 
 }
 
+// Crea n carte e restituisce il nodo che contiene la prima
 node* createHand(int n) {
     node* head = NULL;
     node* current = NULL;
@@ -113,30 +122,34 @@ node* createHand(int n) {
     return head;
 }
 
+// Crea una tessera e la restituisce
 tessera createTessera() {
     tessera t = {rand()%6+1, rand()%6+1};
     return t;
 }
 
+// Rimuove la tessera in posizione n dalla lista - BUGGED
 tessera removeTessera(node* hand, int n) {
     n = n-1;
     if(n == 0) {
         tessera t = hand->me;
-        *hand = *hand->next;
+        if(hand->next != NULL)
+            *hand = *hand->next;
+        else
+            hand = NULL;
         return t;
     }
 
-    //node* head = hand;
     for(int i = 1; i<n; i++) {
         hand = hand->next;
     }
     tessera t = hand->next->me;
     hand->next = hand->next->next;
-    //hand = head;
     return t;
 
 }
 
+// Stampa le tessere, utilizzata per debug principalemnte
 void printHand(node* hand) {
     printf("\n");
     while(hand != NULL) {
@@ -146,18 +159,25 @@ void printHand(node* hand) {
     printf("\n");
 }
 
+// Stampa il campo
 void printField(node* field) {
     printf("\nTavolo attuale:");
     printHand(field);
 }
 
+// Controlla il turno del giocatore
 void makeMove(node* field, node* hand) {
-    tessera t = printFancyHand(hand);
+    tessera t = playerMove(hand);
+
+    // continuare con modifica del campo
+    // e check fine partita
+
     printHand(hand);
 }
 
-tessera printFancyHand(node* hand) {
-    int n = 0;
+// Fa scegliere la tessera da giocare, la rimuove dalla mano e la restituisce al controller
+tessera playerMove(node* hand) {
+    int n = 1;
     // n = 2;
     int count = 0;
     tessera t;
@@ -171,15 +191,15 @@ tessera printFancyHand(node* hand) {
         hand = hand->next;
     }
     printf("\nScelta: ");
-///*
+/*
     scanf("%d",&n);
     while(n<1 || n>count) {
         printf("Inserire un valore valido: ");
         scanf("%d", &n);
     }
-//*/
+*/
 
-    t = removeTessera(head, n);
+    t = removeTessera(&head, n);
 
     return t;
 }
