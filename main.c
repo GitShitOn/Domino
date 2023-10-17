@@ -216,12 +216,12 @@ node* makeMove(node* field, node* hand) {
 // Fa scegliere la tessera da giocare, la rimuove dalla mano e la restituisce al controller
 tessera playerMove(node* hand, node* field) {
     int n = 3;
-    int count = 0;
     tessera t;
     node* head = hand;
     bool check = true;
 
     do {
+        int count = 0;
         printf("\nScegli la tessera che vuoi giocare");
         hand = head;
 
@@ -231,13 +231,13 @@ tessera playerMove(node* hand, node* field) {
             head = head->next;
         }
         printf("\n\nScelta: ");
-    /*
+    // /*
         scanf("%d",&n);
         while(n<1 || n>count) {
             printf("Inserire un valore valido: ");
             scanf("%d", &n);
         }
-    */
+    // */
 
         t = removeTessera(hand, n);
         hand = head;
