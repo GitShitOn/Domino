@@ -172,9 +172,10 @@ node* addTessera(node* hand, tessera t, int n) {
 
 // Rimuove la tessera in posizione n dalla lista - BUGGED
 tessera removeTessera(node* hand, int n) {
-    n--;;
+    n--;
+    tessera t;
     if(n == 0) {
-        tessera t = hand->me;
+        t = hand->me;
         if(hand->next != NULL)
             *hand = *hand->next;
         return t;
@@ -183,7 +184,8 @@ tessera removeTessera(node* hand, int n) {
     for(int i = 1; i<n; i++) {
         hand = hand->next;
     }
-    tessera t = hand->next->me;
+    if(hand->next != NULL)
+        t = hand->next->me;
     hand->next = hand->next->next;
     return t;
 
@@ -215,7 +217,7 @@ node* makeMove(node* field, node* hand) {
 
 // Fa scegliere la tessera da giocare, la rimuove dalla mano e la restituisce al controller
 tessera playerMove(node* hand, node* field) {
-    int n = 3;
+    int n = 1;
     tessera t;
     bool check = true;
     node* head = hand;
@@ -245,7 +247,7 @@ tessera playerMove(node* hand, node* field) {
 
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
-            head = addTessera(hand, t, n);
+            head = addTessera(hand, t, n);      // BUG
             check = false;
         }
     } while(!check);
