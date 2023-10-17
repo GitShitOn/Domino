@@ -154,6 +154,9 @@ node* addTessera(node* hand, tessera t, int n) {
     new->me = t;
     new->next = NULL;
     n--;
+    if(hand == NULL) {
+        return new;
+    }
     while(i<n && hand->next != NULL) {
         prev = hand;
         hand = head->next;
@@ -336,6 +339,7 @@ bool checkEndGame(node* field, node* hand) {
     while(hand->next != NULL) {
         if(canConnectLeft(first, hand->me) || canConnectRight(field->me, hand->me))
             return false;
+        hand = hand->next;
     }
     return true;
 }
