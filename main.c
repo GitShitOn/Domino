@@ -8,20 +8,28 @@ typedef struct{
     int r_cell;
 } tessera;
 
-typedef struct nod{
+typedef struct node{
     tessera me;
-    struct nod* next;
+    struct node* next;
 } node;
 
 void menu(void);
 void soloGame();
 void printHand(node*);
 void printField(node*);
-void makeMove(node*, node*);
+node* makeMove(node*, node*);
 node* createHand(int);
-tessera playerMove(node*);
+tessera playerMove(node*, node*);
 tessera createTessera();
+node* addTessera(node*, tessera, int);
 tessera removeTessera(node*, int);
+bool isValidMove(node*, tessera);
+bool canConnectLeft(tessera, tessera);
+bool canConnectRight(tessera, tessera);
+node* addToField(node*, tessera);
+tessera rotateTessera(tessera, tessera, bool);
+bool checkEndGame(node*, node*);
+int contaPunti(node*);
 
 // Main
 int main(void) {
@@ -38,7 +46,7 @@ void menu() {
     int scelta = 1;
 
     while(play) {
-        printf("\nBenvenuto!\n\n");
+        printf("\n\nBenvenuto!\n\n");
         printf("Scegli la tua modalita' di gioco:\n");
         printf("1 - Solo\n");
         printf("2 - AI\n");
@@ -75,6 +83,7 @@ void menu() {
 // Funzione per la gestione di una partita in solo
 void soloGame() {
     int n = 5;
+    int punti = 0;
     bool fine = false;
     node* field = NULL;
 /*
@@ -84,18 +93,27 @@ void soloGame() {
     } while(n<=0);
 */
 
-    node* head = createHand(n);
+    node* hand = createHand(n);
 
     printf("\n\nLa tua mano:");
-    printHand(head);
+    printHand(hand);
 
     int count = 10;
     while(!fine && count > 0) {
         printField(field);
-        makeMove(field, head);
+        field = makeMove(field, hand);
         count--;
-    // continuare
+        if(checkEndGame(field, hand))
+            fine = true;
     }
+
+    printf("\n\nImpossibile continuare a giocare!\n");
+    printField(field);
+    printf("\nLa tua mano:");
+    printHand(hand);
+
+    punti = contaPunti(field);
+    printf("\nHai realizzato un totale di %d punti!\n", punti);
 
 }
 
@@ -128,15 +146,34 @@ tessera createTessera() {
     return t;
 }
 
+node* addTessera(node* hand, tessera t, int n) {
+    int i = 0;
+    node* prev = NULL;
+    node* new = (node*)malloc(sizeof(node));
+    node* head = hand;
+    new->me = t;
+    new->next = NULL;
+    n--;
+    while(i<n && hand->next != NULL) {
+        prev = hand;
+        hand = head->next;
+    }
+    if(prev == NULL) {
+        new->next = hand;
+        return new;
+    }
+    prev->next = new;
+    new->next = hand;
+    return head;
+}
+
 // Rimuove la tessera in posizione n dalla lista - BUGGED
 tessera removeTessera(node* hand, int n) {
-    n = n-1;
+    n--;;
     if(n == 0) {
         tessera t = hand->me;
         if(hand->next != NULL)
             *hand = *hand->next;
-        else
-            // Settare *hand a NULL
         return t;
     }
 
@@ -166,40 +203,154 @@ void printField(node* field) {
 }
 
 // Controlla il turno del giocatore
-void makeMove(node* field, node* hand) {
-    tessera t = playerMove(hand);
+node* makeMove(node* field, node* hand) {
+    tessera t = playerMove(hand, field);
+    //printHand(hand);
 
-    // continuare con modifica del campo
-    // e check fine partita
-
-    printHand(hand);
+    return field = addToField(field, t);
 }
 
 // Fa scegliere la tessera da giocare, la rimuove dalla mano e la restituisce al controller
-tessera playerMove(node* hand) {
-    int n = 1;
-    // n = 2;
+tessera playerMove(node* hand, node* field) {
+    int n = 3;
     int count = 0;
     tessera t;
     node* head = hand;
+    bool check = true;
 
-    printf("\nScegli la tessera che vuoi giocare");
+    do {
+        printf("\nScegli la tessera che vuoi giocare");
+        hand = head;
 
-    while(head != NULL) {
-        count++;
-        printf("\n%d - [%d|%d]", count, head->me.l_cell, head->me.r_cell);
-        head = head->next;
-    }
-    printf("\nScelta: ");
-/*
-    scanf("%d",&n);
-    while(n<1 || n>count) {
-        printf("Inserire un valore valido: ");
-        scanf("%d", &n);
-    }
-*/
+        while(head != NULL) {
+            count++;
+            printf("\n%d - [%d|%d]", count, head->me.l_cell, head->me.r_cell);
+            head = head->next;
+        }
+        printf("\n\nScelta: ");
+    /*
+        scanf("%d",&n);
+        while(n<1 || n>count) {
+            printf("Inserire un valore valido: ");
+            scanf("%d", &n);
+        }
+    */
 
-    t = removeTessera(hand, n);
+        t = removeTessera(hand, n);
+        hand = head;
+        if(!isValidMove(field, t)) {
+            printf("\nMossa non valida, riprovare!\n");
+            head = addTessera(hand, t, n);
+            check = false;
+        }
+    } while(!check);
+
+    printf("\n");
 
     return t;
 }
+
+
+bool isValidMove(node* field, tessera t) {
+    if(field == NULL)
+        return true;
+    if(canConnectLeft(field->me, t))
+        return true;
+    while(field->next != NULL)
+        field = field->next;
+    if(canConnectRight(field->me, t))
+        return true;
+    return false;
+}
+
+// field - t
+bool canConnectRight(tessera t1, tessera t2) {
+    return (
+            t1.r_cell == t2.l_cell || 
+            t1.r_cell == t2.r_cell
+            );
+}
+
+// field - t
+bool canConnectLeft(tessera t1, tessera t2) {
+    return (
+            t1.l_cell == t2.l_cell || 
+            t1.l_cell == t2.r_cell
+            );
+}
+
+node* addToField(node* field, tessera t) {
+    node* new = (node*)malloc(sizeof(node));
+    node* head = field;
+    new->next = NULL;
+    if(field == NULL ) {
+        new->me = t;
+        return new;
+    }
+    if(canConnectLeft(field->me, t)) {
+        new->me = rotateTessera(t, field->me, false);
+        new->next = field;
+        return new;
+    }
+    while(field->next != NULL)
+        field = field->next;
+    new->me = rotateTessera(field->me, t, true);
+    field->next = new;
+    return head;
+}
+
+/* 
+    side = false
+    Combacia il lato destro di t1 con quello sinistro di t2
+    [2|1] & [2|5] -> [1|2] & [2|5];
+    side = true
+    Combacia il lato sinistro di t2 con quello destro di t1
+    [2|1] & [2|1] -> [2|1] & [1|2];
+*/
+tessera rotateTessera(tessera t1, tessera t2, bool side) {
+    if(!side) {
+        if(t1.r_cell == t2.l_cell)
+            return t1;
+        int aus = t1.l_cell;
+        t1.l_cell = t1.r_cell;
+        t1.r_cell = aus;
+        return t1;
+    }
+    if(t2.l_cell == t1.r_cell)
+        return t2;
+    int aus = t2.l_cell;
+    t2.l_cell = t2.r_cell;
+    t2.r_cell = aus;
+    return t2;
+}
+
+bool checkEndGame(node* field, node* hand) {
+    if(hand == NULL)
+        return true;
+    if(field == NULL) {
+        return false;
+    }
+    tessera first = field->me;
+    while(field->next != NULL)
+        field = field->next;
+    while(hand->next != NULL) {
+        if(canConnectLeft(first, hand->me) || canConnectRight(field->me, hand->me))
+            return false;
+    }
+    return true;
+}
+
+int contaPunti(node* field) {
+    int punti = 0;
+    do {
+        punti += field->me.l_cell + field->me.r_cell;
+        field = field->next;
+    } while(field->next != NULL);
+    return punti;
+}
+
+/*
+    TODO: 
+        -fixare problema quando si toglie l'ultima tessera dalla mano
+        -permettere di scegliere lato dal quale aggiungere la tessera (priorità attuale: lx dx)
+*/
