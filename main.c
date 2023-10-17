@@ -217,18 +217,18 @@ node* makeMove(node* field, node* hand) {
 tessera playerMove(node* hand, node* field) {
     int n = 3;
     tessera t;
-    node* head = hand;
     bool check = true;
+    node* head = hand;
 
     do {
         int count = 0;
-        printf("\nScegli la tessera che vuoi giocare");
         hand = head;
+        printf("\nScegli la tessera che vuoi giocare");
 
-        while(head != NULL) {
+        while(hand != NULL) {
             count++;
-            printf("\n%d - [%d|%d]", count, head->me.l_cell, head->me.r_cell);
-            head = head->next;
+            printf("\n%d - [%d|%d]", count, hand->me.l_cell, hand->me.r_cell);
+            hand = hand->next;
         }
         printf("\n\nScelta: ");
     // /*
@@ -239,8 +239,10 @@ tessera playerMove(node* hand, node* field) {
         }
     // */
 
-        t = removeTessera(hand, n);
         hand = head;
+
+        t = removeTessera(hand, n);
+
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
             head = addTessera(hand, t, n);
