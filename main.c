@@ -110,13 +110,14 @@ void soloGame() {
     printf("\n\nLa tua mano:");
     printHand(hand);
 
-    int count = 10;
-    while(!fine && count > 0) {
+    // int count = 10;
+    //while(!fine && count > 0) {
+    while(!fine) {
         printField(field);
         nodess = makeMove(field, hand);
         hand = nodess.hand;
         field = nodess.field;
-        count--;
+        //count--;
         if(checkEndGame(field, hand))
             fine = true;
     }
@@ -248,6 +249,8 @@ tnode playerMove(node* hand, node* field) {
             hand = hand->next;
         }
         printf("\n\nScelta: ");
+
+       // n = rand()%count;printf("%d",n+1);
     // /*           <-----
         scanf("%d",&n);
         while(n<1 || n>count) {
@@ -263,10 +266,12 @@ tnode playerMove(node* hand, node* field) {
 
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
+            printField(field);
             check = false;
         }
         else {
             head = removeTessera(head, n);
+            check = true;
         }
     } while(!check);
 
@@ -359,7 +364,7 @@ bool checkEndGame(node* field, node* hand) {
     tessera first = field->me;
     while(field->next != NULL)
         field = field->next;
-    while(hand->next != NULL) {
+    while(hand->next != NULL) {     // bug nel caso ci sia solo 1 tessera in mano
         if(canConnectLeft(first, hand->me) || canConnectRight(field->me, hand->me))
             return false;
         hand = hand->next;
@@ -378,8 +383,10 @@ int contaPunti(node* field) {
 
 tessera peekHand(node* hand, int n) {
     int i = 0;
-    while(i<n && hand->next != NULL)
+    while(i<n && hand->next != NULL) {
         hand = hand->next;
+        i++;
+    }
     return hand->me;
 }
 
