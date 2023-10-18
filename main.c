@@ -13,13 +13,23 @@ typedef struct node{
     struct node* next;
 } node;
 
+typedef struct{
+    tessera t;
+    node* head;
+} tnode;
+
+typedef struct{
+    node* hand;
+    node* field;
+} nodes;
+
 void menu(void);
 void soloGame();
 void printHand(node*);
 void printField(node*);
-node* makeMove(node*, node*);
+nodes makeMove(node*, node*);
 node* createHand(int);
-tessera playerMove(node*, node*);
+tnode playerMove(node*, node*);
 tessera createTessera();
 node* addTessera(node*, tessera, int);
 node* removeTessera(node*, int);
@@ -87,6 +97,7 @@ void soloGame() {
     int punti = 0;
     bool fine = false;
     node* field = NULL;
+    nodes nodess;
 /*
     do {
         printf("\nScegliere il numero di tessere: ");
@@ -99,11 +110,13 @@ void soloGame() {
     printf("\n\nLa tua mano:");
     printHand(hand);
 
-    //int count = 10;
-    while(!fine /*&& count > 0*/) {
+    int count = 10;
+    while(!fine && count > 0) {
         printField(field);
-        field = makeMove(field, hand);
-        //count--;
+        nodess = makeMove(field, hand);
+        hand = nodess.hand;
+        field = nodess.field;
+        count--;
         if(checkEndGame(field, hand))
             fine = true;
     }
@@ -210,16 +223,16 @@ void printField(node* field) {
 }
 
 // Controlla il turno del giocatore
-node* makeMove(node* field, node* hand) {
-    tessera t = playerMove(hand, field);
+nodes makeMove(node* field, node* hand) {
+    tnode rValue = playerMove(hand, field);
     //printHand(hand);
-
-    return field = addToField(field, t);
+    nodes nodess = {rValue.head, addToField(field, rValue.t)};
+    return nodess;
 }
 
 // Fa scegliere la tessera da giocare, la rimuove dalla mano e la restituisce al controller
-tessera playerMove(node* hand, node* field) {
-    int n = 1;
+tnode playerMove(node* hand, node* field) {
+    int n = 0;
     tessera t;
     bool check = true;
     node* head = hand;
@@ -235,30 +248,32 @@ tessera playerMove(node* hand, node* field) {
             hand = hand->next;
         }
         printf("\n\nScelta: ");
-    // /*
+    // /*           <-----
         scanf("%d",&n);
         while(n<1 || n>count) {
             printf("Inserire un valore valido: ");
             scanf("%d", &n);
         }
+        n--;
     // */
 
         hand = head;
 
-        t = peekHand(hand, n--);
+        t = peekHand(hand, n);
 
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
             check = false;
         }
         else {
-            head = removeTessera(hand, n--);
+            head = removeTessera(head, n);
         }
     } while(!check);
 
     printf("\n");
-
-    return t;
+    
+    tnode rValue = {t, head};
+    return rValue;
 }
 
 
