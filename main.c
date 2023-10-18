@@ -63,19 +63,19 @@ void menu() {
         printf("2 - AI\n");
         printf("3 - Quit");
         printf("\nScelta: ");
-/*
+// /*       <-----
         scanf("%d", &scelta);
         while(scelta < 1 || scelta > 3) {
             printf("\nInserire una scelta valida: ");
             scanf("%d", &scelta);
         }
-*/
+// */
 
         switch(scelta) {
             case 1:
                 soloGame();
 
-                scelta = 3; //modificare, solo per debug
+                // scelta = 3; //modificare, solo per debug
 
                 break;
             case 2:
@@ -98,12 +98,12 @@ void soloGame() {
     bool fine = false;
     node* field = NULL;
     nodes nodess;
-/*
+// /*       <----
     do {
         printf("\nScegliere il numero di tessere: ");
         scanf("%d",&n);
     } while(n<=0);
-*/
+// */
 
     node* hand = createHand(n);
 
@@ -263,6 +263,7 @@ tnode playerMove(node* hand, node* field) {
         hand = head;
 
         t = peekHand(hand, n);
+        printf("Tessera: [%d|%d]\n", t.l_cell, t.r_cell);
 
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
