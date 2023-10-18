@@ -369,6 +369,8 @@ bool checkEndGame(node* field, node* hand) {
             return false;
         hand = hand->next;
     }
+    if(canConnectLeft(first, hand->me) || canConnectRight(field->me, hand->me))
+        return false;
     return true;
 }
 
