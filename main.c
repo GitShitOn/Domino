@@ -364,7 +364,7 @@ bool checkEndGame(node* field, node* hand) {
     tessera first = field->me;
     while(field->next != NULL)
         field = field->next;
-    while(hand->next != NULL) {     // bug nel caso ci sia solo 1 tessera in mano
+    while(hand->next != NULL) {
         if(canConnectLeft(first, hand->me) || canConnectRight(field->me, hand->me))
             return false;
         hand = hand->next;
