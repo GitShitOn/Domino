@@ -22,7 +22,7 @@ node* createHand(int);
 tessera playerMove(node*, node*);
 tessera createTessera();
 node* addTessera(node*, tessera, int);
-tessera removeTessera(node*, int);
+node* removeTessera(node*, int);
 bool isValidMove(node*, tessera);
 bool canConnectLeft(tessera, tessera);
 bool canConnectRight(tessera, tessera);
@@ -30,6 +30,7 @@ node* addToField(node*, tessera);
 tessera rotateTessera(tessera, tessera, bool);
 bool checkEndGame(node*, node*);
 int contaPunti(node*);
+tessera peekHand(node*, int);
 
 // Main
 int main(void) {
@@ -98,11 +99,11 @@ void soloGame() {
     printf("\n\nLa tua mano:");
     printHand(hand);
 
-    int count = 10;
-    while(!fine && count > 0) {
+    //int count = 10;
+    while(!fine /*&& count > 0*/) {
         printField(field);
         field = makeMove(field, hand);
-        count--;
+        //count--;
         if(checkEndGame(field, hand))
             fine = true;
     }
@@ -171,23 +172,24 @@ node* addTessera(node* hand, tessera t, int n) {
 }
 
 // Rimuove la tessera in posizione n dalla lista - BUGGED
-tessera removeTessera(node* hand, int n) {
-    n--;
+node* removeTessera(node* hand, int n) {
     tessera t;
     if(n == 0) {
         t = hand->me;
         if(hand->next != NULL)
-            *hand = *hand->next;
-        return t;
+            hand = hand->next;
+        else
+            hand = NULL;
+        return hand;
     }
-
+    node* head = hand;
     for(int i = 1; i<n; i++) {
         hand = hand->next;
     }
     if(hand->next != NULL)
         t = hand->next->me;
     hand->next = hand->next->next;
-    return t;
+    return head;
 
 }
 
@@ -243,12 +245,14 @@ tessera playerMove(node* hand, node* field) {
 
         hand = head;
 
-        t = removeTessera(hand, n);
+        t = peekHand(hand, n--);
 
         if(!isValidMove(field, t)) {
             printf("\nMossa non valida, riprovare!\n");
-            head = addTessera(hand, t, n);      // BUG
             check = false;
+        }
+        else {
+            head = removeTessera(hand, n--);
         }
     } while(!check);
 
@@ -355,6 +359,13 @@ int contaPunti(node* field) {
         field = field->next;
     } while(field->next != NULL);
     return punti;
+}
+
+tessera peekHand(node* hand, int n) {
+    int i = 0;
+    while(i<n && hand->next != NULL)
+        hand = hand->next;
+    return hand->me;
 }
 
 /*
