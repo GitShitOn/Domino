@@ -37,15 +37,18 @@ void aiGame();
 void challenge();
 node* createHand();
 tessera createTessera();
-tessera createTesseraV(int, int);
+tessera createTesseraValue(int, int);
 node* removeTessera(node*, int);
 result resolveChallenge(node*, tessera, result);    //  challenge
+void printNodes(node*);
 void printHand(node*);
 void printField(node*);
 int printPossibleMoves(node*);
 bool isValidMove(node*, tessera, int);
 tessera peekHand(node*, int);
 node* addToField(node*, tessera, int);
+bool checkFine(node*, node*);
+int contaPunti(node*);
 
 int main(int args, char** argv) {
 
@@ -90,7 +93,7 @@ void menu() {
         switch(scelta) {
             case 1:
                 soloGame();
-                // scelta = 3; // solo per debug
+                // scelta = 3; // solo per debug       <------
                 break;
             case 2:
                 aiGame();
@@ -118,7 +121,6 @@ void soloGame() {
     int n;
     int side;
 
-    printf("\n\nLa mano:");
     printHand(hand);
 
     while(!fine) {
@@ -131,7 +133,7 @@ void soloGame() {
                 printField(field);
             maxHand = printPossibleMoves(hand);
 
-            // n = rand()%count;printf("%d",n+1);       /*    <-----
+            // n = rand()%maxHand;printf("%d",n+1);side=rand()%1+1;       /*    <-----
             scanf("%d",&n);
             while(n<0 || n>maxHand) {
                 printf("Inserire un valore valido: ");
@@ -141,7 +143,7 @@ void soloGame() {
                 return;   
             n--;
             while(side != 0 && side != 1 && field != NULL) {
-                printf("\nScegliere il lato [Destra(0) | Sinistra(1)]: ");
+                printf("\nScegliere il lato [Sinistra(%d) | Destra(%d)]: ", sx, dx);
                 scanf("%d", &side);
             }
             // */
@@ -156,11 +158,18 @@ void soloGame() {
         field = addToField(field, peekHand(hand, n), side);
         hand = removeTessera(hand, n);
 
-        //  controllare se game è finito
-
+        fine = checkFine(field, hand);
     }
 
-
+    printf("\nFine della partita, non ci sono più mosse disponibili!\n");
+    printf("\nHai totalizzato un totale di %d punti!\n", contaPunti(field));
+    printField(field);
+    printHand(hand);
+    printf("\nPress any key to continue...");
+    char c;
+    fflush(stdin);
+    scanf("%c",&c);
+    fflush(stdin);
 }
 
 //  ai game
@@ -199,13 +208,13 @@ void challenge() {
         // */
         if(hand == NULL) {
             hand = (node*)malloc(sizeof(node));
-            hand->me = createTesseraV(a,b);
+            hand->me = createTesseraValue(a,b);
             hand->next = NULL;
             current = hand;
         }
         else {
             node* nodo = (node*)malloc(sizeof(node));
-            nodo->me = createTesseraV(a,b);
+            nodo->me = createTesseraValue(a,b);
             nodo->next = NULL;
             current->next = nodo;
             current = current->next;
@@ -236,12 +245,14 @@ node* createHand() {
         if(hand == NULL) {
             hand = (node*)malloc(sizeof(node));
             hand->me = createTessera();
+            // hand->me = createTesseraValue(3,3);
             hand->next = NULL;
             current = hand;
         }
         else {
             node* nodo = (node*)malloc(sizeof(node));
             nodo->me = createTessera();
+            // nodo->me = createTesseraValue(3,3);
             nodo->next = NULL;
             current->next = nodo;
             current = current->next;
@@ -257,14 +268,14 @@ tessera createTessera() {
     return t;
 }
 
-// idk
-tessera createTesseraV(int a, int b) {
+// crea una tessera passandogli i valori (non random)
+tessera createTesseraValue(int a, int b) {
     tessera t = {a, b};
     return t;
 }
 
 // Stampa le tessere, utilizzata per debug principalemnte
-void printHand(node* hand) {
+void printNodes(node* hand) {
     printf("\n");
     while(hand != NULL) {
         printf("[%d|%d] ", hand->me.l_cell, hand->me.r_cell);
@@ -273,10 +284,15 @@ void printHand(node* hand) {
     printf("\n");
 }
 
+void printHand(node* hand) {
+    printf("\nLa tua mano:");
+    printNodes(hand);
+}
+
 // Stampa il campo
 void printField(node* field) {
     printf("\nTavolo attuale:");
-    printHand(field);
+    printNodes(field);
 }
 
 // stampa la mano (fancy)
@@ -340,14 +356,15 @@ result resolveChallenge(node* hand, tessera t, result score) {
     return best_score;
 }
 
-// Rimuove la tessera in posizione n dalla lista - BUGGED
+// Rimuove la tessera in posizione n dalla lista - BUGGED ? 
 node* removeTessera(node* hand, int n) {
     
     if(hand == NULL)
         return NULL;
-    
+
+
     // se 0 ritorna il prossimo
-    if(!n)
+    if(!n) 
         return hand->next;
     
     if(hand->next == NULL)
@@ -417,4 +434,28 @@ node* addToField(node* field, tessera t, int side) {
         return fHead;
     }
     return NULL;
+}
+
+//  controlla se il gioco può andare avanti
+bool checkFine(node* field, node* hand) {
+    if(hand == NULL)
+        return true;
+    while(hand != NULL) {
+        if (isValidMove(field, hand->me, dx))
+            return false;
+        if (isValidMove(field, hand->me, sx))
+            return false;
+        hand = hand->next;
+    }
+    return true;
+}
+
+int contaPunti(node* field) {
+    int punti = 0;
+    while(field != NULL) {
+        punti += field->me.l_cell;
+        punti += field->me.r_cell;
+        field = field->next;
+    }
+    return punti;
 }
