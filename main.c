@@ -19,12 +19,6 @@ typedef struct node {
     struct node* next;
 } node;
 
-// int n, int side
-typedef struct {
-    int n;
-    int side;
-} move;
-
 // node* field, node* hand
 typedef struct {
     node* field;
@@ -51,6 +45,7 @@ void printField(node*);
 int printPossibleMoves(node*);
 bool isValidMove(node*, tessera, int);
 tessera peekHand(node*, int);
+node* addToField(node*, tessera, int);
 
 int main(int args, char** argv) {
 
@@ -129,9 +124,11 @@ void soloGame() {
     while(!fine) {
 
         validMove = false;
-        side = -1;
 
         do {
+            side = -1;
+            if(field != NULL)
+                printField(field);
             maxHand = printPossibleMoves(hand);
 
             // n = rand()%count;printf("%d",n+1);       /*    <-----
@@ -156,7 +153,10 @@ void soloGame() {
 
         } while(!validMove);
 
-        
+        field = addToField(field, peekHand(hand, n), side);
+        hand = removeTessera(hand, n);
+
+        //  controllare se game è finito
 
     }
 
@@ -346,6 +346,7 @@ node* removeTessera(node* hand, int n) {
     if(hand == NULL)
         return NULL;
     
+    // se 0 ritorna il prossimo
     if(!n)
         return hand->next;
     
@@ -394,4 +395,26 @@ tessera peekHand(node* hand, int n) {
         i++;
     }
     return hand->me;
+}
+
+node* addToField(node* field, tessera t, int side) {
+    node* head = (node*)malloc(sizeof(node));
+    head->me = t;
+    if(field == NULL) {
+        head->next = NULL;
+        return head;
+    }
+    if(side == sx) {
+        head->next = field;
+        return head;
+    }
+    else if(side == dx) {
+        node* fHead = field;
+        while(field->next != NULL)
+            field = field->next;
+        head->next = NULL;
+        field->next = head;
+        return fHead;
+    }
+    return NULL;
 }
