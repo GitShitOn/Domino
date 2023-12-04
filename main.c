@@ -49,6 +49,7 @@ tessera peekHand(node*, int);
 node* addToField(node*, tessera, int);
 bool checkFine(node*, node*);
 int contaPunti(node*);
+int findBestMove(node*, node*, int);
 
 int main(int args, char** argv) {
 
@@ -174,22 +175,43 @@ void soloGame() {
 
 //  ai game
 void aiGame() {
+    char stall;
     node* hand = createHand();
     node* field = (node*)malloc(sizeof(node));
+    int bestMove;
 
     bool fine = false;
 
-    printf("\n\nLa mano:");
     printHand(hand);
 
-    //  find best move order
-
     while(!fine) {
-        printPossibleMoves(hand);
+        //   controllare possibili mosse
 
-        //  print best move
+        bestMove = findBestMove(field, hand, 0);
+
+        // migliore mossa è best move
+        // aggiungere a field
+        // togliere da hand
+
+
+        fine = checkFine(field, hand); 
+
+        fine = true;    // togliere ovviamente :)
+
+        printf("\nNext...\n");
+        fflush(stdin);
+        scanf("%c",&stall);
+        fflush(stdin);
     }
 
+    printf("\nFine della partita, non ci sono più mosse disponibili!\n");
+    printf("\nE' stato totalizzato un totale di %d punti!\n", contaPunti(field));
+    printField(field);
+    printHand(hand);
+    printf("\nPress any key to continue...");
+    fflush(stdin);
+    scanf("%c",&stall);
+    fflush(stdin);
 
 }
 
@@ -199,10 +221,10 @@ void challenge() {
     node* hand = NULL;
     node* current;
 
-    // scanf("%d", &n);
+    scanf("%d", &n);    //  <-----
 
     for(int i = 0; i<n; i++) {
-        /*
+        // /*       <-----
         scanf("%d", &a);
         scanf("%d", &b);
         // */
@@ -458,4 +480,8 @@ int contaPunti(node* field) {
         field = field->next;
     }
     return punti;
+}
+
+int findBestMove(node* field, node* hand, int score) {
+
 }
