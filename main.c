@@ -4,29 +4,34 @@
 #include <string.h>
 #include <time.h>
 
-#define dx 0;
-#define sx 1;
+#define dx 0
+#define sx 1
 
+// int l_cell, int r_cell
 typedef struct {
     int l_cell;
     int r_cell;
 } tessera;
 
+// tessera me, node* next
 typedef struct node {
     tessera me;
     struct node* next;
 } node;
 
+// int n, int side
 typedef struct {
     int n;
     int side;
 } move;
 
+// node* field, node* hand
 typedef struct {
     node* field;
     node* hand;
 } nodes;
 
+// int score, char* seq
 typedef struct {
     int score;
     char* seq;
@@ -40,17 +45,18 @@ node* createHand();
 tessera createTessera();
 tessera createTesseraV(int, int);
 node* removeTessera(node*, int);
-result resolveChallenge(node*, tessera, result);
+result resolveChallenge(node*, tessera, result);    //  challenge
 void printHand(node*);
 void printField(node*);
 int printPossibleMoves(node*);
-bool isValidMove(node*, node*, move);
+bool isValidMove(node*, tessera, int);
+tessera peekHand(node*, int);
 
 int main(int args, char** argv) {
 
     srand(time(NULL));
 
-    challenge(); return 0;
+    // challenge(); return 0;   //  debug x challenge
 
     // controllo se challenge
     if(args>1) {
@@ -89,9 +95,7 @@ void menu() {
         switch(scelta) {
             case 1:
                 soloGame();
-
                 // scelta = 3; // solo per debug
-
                 break;
             case 2:
                 aiGame();
@@ -131,22 +135,21 @@ void soloGame() {
 
             // n = rand()%count;printf("%d",n+1);       /*    <-----
             scanf("%d",&n);
-            while(n<1 || n>maxHand) {
+            while(n<0 || n>maxHand) {
                 printf("Inserire un valore valido: ");
                 scanf("%d", &n);
             }
+            if(n == 0)  // quit di emergenza con 0
+                return 0;   
             n--;
             while(side != 0 && side != 1 && field != NULL) {
                 printf("\nScegliere il lato [Destra(0) | Sinistra(1)]: ");
                 scanf("%d", &side);
             }
             // */
-
-            move m = {n, side};
-            /*
-            if(isValidMove(field, hand, m))
+            
+            if(isValidMove(field, peekHand(hand, n), side))
                 validMove = true;
-                */
 
         } while(!validMove);
 
@@ -178,14 +181,14 @@ void aiGame() {
 
 //  challenge
 void challenge() {
-    int n = 2, a = 2, b = 3;
+    int n = 3, a = 2, b = 2;
     node* hand = NULL;
     node* current;
 
-    scanf("%d", &n);
+    // scanf("%d", &n);
 
     for(int i = 0; i<n; i++) {
-        // /*
+        /*
         scanf("%d", &a);
         scanf("%d", &b);
         // */
@@ -249,6 +252,7 @@ tessera createTessera() {
     return t;
 }
 
+// idk
 tessera createTesseraV(int a, int b) {
     tessera t = {a, b};
     return t;
@@ -270,6 +274,7 @@ void printField(node* field) {
     printHand(field);
 }
 
+// stampa la mano (fancy)
 int printPossibleMoves(node* hand) {
     int count = 0;
         printf("\nScegli la tessera che vuoi giocare");
@@ -284,9 +289,14 @@ int printPossibleMoves(node* hand) {
     return count;     
 }
 
+// Challenge
 result resolveChallenge(node* hand, tessera t, result score) {
     result e_score, best_score, og_score;
     node* og = hand;
+    best_score = score;
+    og_score = score;
+    char* og_seq = (char*)malloc(strlen(score.seq));
+    strcpy(og_seq, score.seq);
     int i = 0;
     if(t.l_cell == 0) {
         while(hand != NULL) {
@@ -300,19 +310,17 @@ result resolveChallenge(node* hand, tessera t, result score) {
         }
     }
     else {
-        best_score = score;
-        og_score = score;
         while(hand != NULL) {
             if(t.r_cell == hand->me.l_cell) {
                 score.score = og_score.score + hand->me.l_cell + hand->me.r_cell;
-                sprintf(score.seq, "%s R %d %d ", og_score.seq, hand->me.l_cell, hand->me.r_cell);
+                sprintf(score.seq, "%sR %d %d ", og_seq, hand->me.l_cell, hand->me.r_cell);
                 e_score = resolveChallenge(removeTessera(og, i), hand->me, score);
                 if(e_score.score > best_score.score)
                     best_score = e_score;
             }
-            if(t.r_cell == hand->me.l_cell) {
+            if(t.l_cell == hand->me.r_cell) {
                 score.score = og_score.score + hand->me.l_cell + hand->me.r_cell;
-                sprintf(score.seq, "%s L %d %d ", og_score.seq, hand->me.l_cell, hand->me.r_cell);
+                sprintf(score.seq, "%sL %d %d ", og_seq, hand->me.l_cell, hand->me.r_cell);
                 e_score = resolveChallenge(removeTessera(og, i), hand->me, score);
                 if(e_score.score > best_score.score)
                     best_score = e_score;
@@ -335,11 +343,14 @@ node* removeTessera(node* hand, int n) {
     
     if(!n)
         return hand->next;
+    
+    if(hand->next == NULL)
+        return hand;
 
     int i = 0;
     node* head = hand;
 
-    while(i<n-1) {
+    while(i<(n-1)) {
         hand = hand->next;
         i++;
     }
@@ -354,12 +365,25 @@ node* removeTessera(node* hand, int n) {
     return head;
 }
 
-/*
-bool isValidMove(node* field, node* hand, move m) {
+// controlla se una mossa è valida
+bool isValidMove(node* field, tessera t, int side) {
     if(field == NULL)
         return true;
-    if(m.side == dx) {
-        
+    if(side == sx) {
+        if(field->me.l_cell == t.r_cell)
+            return true;
     }
+    else if(side == dx) {
+        //scorrere field
+    }
+    return false;
 }
-*/
+
+tessera peekHand(node* hand, int n) {
+    int i = 0;
+    while(i < n) {
+        hand = hand->next;
+        i++;
+    }
+    return hand->me;
+}
