@@ -50,6 +50,7 @@ node* addToField(node*, tessera, int);
 bool checkFine(node*, node*);
 int contaPunti(node*);
 int findBestMove(node*, node*, int);
+tessera swapTessera(tessera);
 
 int main(int args, char** argv) {
 
@@ -115,12 +116,15 @@ void soloGame() {
     node* hand = createHand();
     node* field = (node*)malloc(sizeof(node));
     field = NULL;
+    char c;
 
     bool fine = false, validMove = false;
+    bool valid;
 
     int maxHand = 0;
     int n;
     int side;
+    tessera peek;
 
     printHand(hand);
 
@@ -130,6 +134,8 @@ void soloGame() {
 
         do {
             side = -1;
+            valid = false;
+
             if(field != NULL)
                 printField(field);
             maxHand = printPossibleMoves(hand);
@@ -143,20 +149,35 @@ void soloGame() {
             if(n == 0)  // quit di emergenza con 0
                 return;   
             n--;
+
+            peek = peekHand(hand, n);
+
+            while(!valid && peek.l_cell != peek.r_cell) {
+                fflush(stdin);
+                printf("\nGirare la tessera? Y/N: ");
+                scanf("%c", &c);
+                if(c == 'y' || c == 'Y') {
+                    peek = swapTessera(peek);
+                    valid = true;
+                }
+                else if(c == 'n' || c == 'N')
+                    valid = true;
+            }
+
             while(side != 0 && side != 1 && field != NULL) {
                 printf("\nScegliere il lato [Sinistra(%d) | Destra(%d)]: ", sx, dx);
                 scanf("%d", &side);
             }
             // */
             
-            if(isValidMove(field, peekHand(hand, n), side))
+            if(isValidMove(field, peek, side))
                 validMove = true;
             else
                 printf("\nMossa non valida!\n");
 
         } while(!validMove);
 
-        field = addToField(field, peekHand(hand, n), side);
+        field = addToField(field, peek, side);
         hand = removeTessera(hand, n);
 
         fine = checkFine(field, hand);
@@ -167,7 +188,6 @@ void soloGame() {
     printField(field);
     printHand(hand);
     printf("\nPress any key to continue...");
-    char c;
     fflush(stdin);
     scanf("%c",&c);
     fflush(stdin);
@@ -467,6 +487,10 @@ bool checkFine(node* field, node* hand) {
             return false;
         if (isValidMove(field, hand->me, sx))
             return false;
+        if (isValidMove(field, swapTessera(hand->me), dx))
+            return false;
+        if (isValidMove(field, swapTessera(hand->me), sx))
+            return false;
         hand = hand->next;
     }
     return true;
@@ -483,5 +507,12 @@ int contaPunti(node* field) {
 }
 
 int findBestMove(node* field, node* hand, int score) {
+    return 0;
+}
 
+tessera swapTessera(tessera t) {
+    int aus = t.l_cell;
+    t.l_cell = t.r_cell;
+    t.r_cell = aus;
+    return t;
 }
