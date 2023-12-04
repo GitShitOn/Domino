@@ -115,6 +115,7 @@ void menu() {
 void soloGame() {
     node* hand = createHand();
     node* field = (node*)malloc(sizeof(node));
+    field = NULL;
 
     bool fine = false, validMove = false;
 
@@ -140,7 +141,7 @@ void soloGame() {
                 scanf("%d", &n);
             }
             if(n == 0)  // quit di emergenza con 0
-                return 0;   
+                return;   
             n--;
             while(side != 0 && side != 1 && field != NULL) {
                 printf("\nScegliere il lato [Destra(0) | Sinistra(1)]: ");
@@ -150,8 +151,12 @@ void soloGame() {
             
             if(isValidMove(field, peekHand(hand, n), side))
                 validMove = true;
+            else
+                printf("\nMossa non valida!\n");
 
         } while(!validMove);
+
+        
 
     }
 
@@ -374,7 +379,10 @@ bool isValidMove(node* field, tessera t, int side) {
             return true;
     }
     else if(side == dx) {
-        //scorrere field
+        while(field->next != NULL)
+            field = field->next;
+        if(field->me.r_cell == t.l_cell)
+            return true;
     }
     return false;
 }
