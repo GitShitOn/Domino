@@ -23,3 +23,12 @@ typedef struct {
     int score;
     char* seq;
 } result;
+
+// tessera t, int n, int score, int side, int gira
+typedef struct {
+    tessera t;
+    int n;
+    int score;
+    int side;
+    int gira;
+} move;

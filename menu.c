@@ -129,25 +129,27 @@ void aiGame() {
     char stall;
     node* hand = createHand();
     node* field = (node*)malloc(sizeof(node));
-    int bestMove;
+    field = NULL;
+    move bestMove;
 
     bool fine = false;
 
     printHand(hand);
 
     while(!fine) {
-        //   controllare possibili mosse
 
         bestMove = findBestMove(field, hand, 0);
 
-        // migliore mossa è best move
-        // aggiungere a field
-        // togliere da hand
+        // printf("%d", bestMove.score);
+
+        field = addToField(field, bestMove.t, bestMove.side);
+        hand = removeTessera(hand, bestMove.n);
 
 
         fine = checkFine(field, hand); 
 
-        fine = true;    // togliere ovviamente :)
+        printField(field);
+        printHand(hand);
 
         printf("\nNext...\n");
         fflush(stdin);

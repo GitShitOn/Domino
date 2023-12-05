@@ -24,6 +24,8 @@ void challenge();
 
 node* createHand();
 
+node* createHandChallenge();
+
 tessera createTessera();
 
 tessera createTesseraValue(int, int);
@@ -56,6 +58,10 @@ int contaPunti(node*);
 
 tessera swapTessera(tessera);
 
+int valoreTessera(tessera);
+
+int contaHand(node*);
+
 
 //  "challenge.c"
 
@@ -64,4 +70,6 @@ result resolveChallenge(node*, tessera, result);
 
 //  "ai.c"
 
-int findBestMove(node*, node*, int);
+move findBestMove(node*, node*, int);
+
+bool checkAndMake(node*, node*, move*, int, int, int);

@@ -71,3 +71,7 @@ int contaHand(node* hand) {
     }
     return ++i;
 }
+
+int valoreTessera(tessera t) {
+    return (t.l_cell+t.r_cell);
+}
