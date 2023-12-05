@@ -34,11 +34,10 @@ move findBestMove(node* field, node* hand, int score) {
 }
 
 bool checkAndMake(node* field, node* hand, move* currentMove, int i, int score, int side) {
-    node* copy = hand;
     if(isValidMove(field, currentMove->t, side)) {
         currentMove->score = findBestMove(
                 addToField(field,hand->me, side), 
-                removeTessera(copy, i), 
+                removeTessera(copyNodes(hand), i), 
                 score + valoreTessera(hand->me)
             ).score;
         return true;

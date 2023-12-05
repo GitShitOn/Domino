@@ -34,6 +34,8 @@ node* removeTessera(node*, int);
 
 node* addToField(node*, tessera, int);
 
+node* copyNodes(node*);
+
 
 //  "print.c"
 
