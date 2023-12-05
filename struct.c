@@ -30,5 +30,4 @@ typedef struct {
     int n;
     int score;
     int side;
-    int gira;
 } move;

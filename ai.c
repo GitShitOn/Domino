@@ -5,7 +5,7 @@ move findBestMove(node* field, node* hand, int score) {
     node* head = hand;
     int i = 0;
     if(hand == NULL)
-        return (move){{0,0}, 0, score, 0, 0};
+        return (move){{0,0}, 0, score, 0};
     while(hand != NULL) {
         currentMove.n = i;
         
@@ -34,10 +34,11 @@ move findBestMove(node* field, node* hand, int score) {
 }
 
 bool checkAndMake(node* field, node* hand, move* currentMove, int i, int score, int side) {
+    node* copy = hand;
     if(isValidMove(field, currentMove->t, side)) {
         currentMove->score = findBestMove(
                 addToField(field,hand->me, side), 
-                removeTessera(hand, i), 
+                removeTessera(copy, i), 
                 score + valoreTessera(hand->me)
             ).score;
         return true;

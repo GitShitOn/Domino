@@ -108,7 +108,7 @@ void soloGame() {
         } while(!validMove);
 
         field = addToField(field, peek, side);
-        hand = removeTessera(hand, n);
+        removeTessera(hand, n);
 
         fine = checkFine(field, hand);
     }
@@ -134,20 +134,18 @@ void aiGame() {
 
     bool fine = false;
 
-    printHand(hand);
+    printStartingHand(hand);
 
     while(!fine) {
 
         bestMove = findBestMove(field, hand, 0);
 
-        // printf("%d", bestMove.score);
-
         field = addToField(field, bestMove.t, bestMove.side);
         hand = removeTessera(hand, bestMove.n);
 
-
         fine = checkFine(field, hand); 
 
+        printMossa(bestMove);
         printField(field);
         printHand(hand);
 

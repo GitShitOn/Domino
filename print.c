@@ -10,15 +10,22 @@ void printNodes(node* hand) {
     printf("\n");
 }
 
+void printText(node* nodes, char* str) {
+    printf("\n%s", str);
+    printNodes(nodes);
+}
+
 void printHand(node* hand) {
-    printf("\nLa tua mano:");
-    printNodes(hand);
+    printText(hand, "La tua mano:");
 }
 
 // Stampa il campo
 void printField(node* field) {
-    printf("\nTavolo attuale:");
-    printNodes(field);
+    printText(field, "Tavolo attuale");
+}
+
+void printStartingHand(node* hand) {
+    printText(hand, "La tua mano di partenza");
 }
 
 // stampa la mano (fancy)
@@ -34,4 +41,8 @@ int printPossibleMoves(node* hand) {
         printf("\n\nScelta: ");
 
     return count;     
+}
+
+void printMossa(move mossa) {
+    printf("\nGiocata la tessera [%d|%d] a %s!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side==dx?"dx":"sx");
 }

@@ -39,11 +39,17 @@ node* addToField(node*, tessera, int);
 
 void printNodes(node*);
 
+void printText(node*, char*);
+
 void printHand(node*);
 
 void printField(node*);
 
+void printStartingHand(node*);
+
 int printPossibleMoves(node*);
+
+void printMossa(move);
 
 
 //  "util.c"
