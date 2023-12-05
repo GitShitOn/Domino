@@ -34,6 +34,36 @@ node* createHand() {
     return hand;
 }
 
+node* createHandChallenge() {
+    node* hand = NULL;
+    node* current;
+    int n, a, b;
+
+    scanf("%d", &n);    //  <-----
+
+    for(int i = 0; i<n; i++) {
+        // /*       <-----
+        scanf("%d", &a);
+        scanf("%d", &b);
+        // */
+        if(hand == NULL) {
+            hand = (node*)malloc(sizeof(node));
+            hand->me = createTesseraValue(a,b);
+            hand->next = NULL;
+            current = hand;
+        }
+        else {
+            node* nodo = (node*)malloc(sizeof(node));
+            nodo->me = createTesseraValue(a,b);
+            nodo->next = NULL;
+            current->next = nodo;
+            current = current->next;
+        }
+    }
+
+    return hand;
+}
+
 // Crea una tessera e la restituisce
 tessera createTessera() {
     tessera t = {rand()%6+1, rand()%6+1};

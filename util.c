@@ -60,3 +60,14 @@ tessera swapTessera(tessera t) {
     t.r_cell = aus;
     return t;
 }
+
+int contaHand(node* hand) {
+    int i = 0;
+    if(hand == NULL)
+        return i;
+    while(hand->next != NULL) {
+        hand = hand->next;
+        i++;
+    }
+    return ++i;
+}

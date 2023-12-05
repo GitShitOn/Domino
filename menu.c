@@ -45,13 +45,14 @@ void soloGame() {
     node* field = (node*)malloc(sizeof(node));
     field = NULL;
     char c;
-
-    bool fine = false, validMove = false;
+    bool fine = false;
+    bool validMove = false;
     bool valid;
-
     int maxHand = 0;
-    int n;
-    int side;
+    int n, side;
+    struct timespec ts;
+    struct timespec tf;
+    timespec_get(&ts, TIME_UTC);
     tessera peek;
 
     printHand(hand);
@@ -82,13 +83,14 @@ void soloGame() {
 
             while(!valid && peek.l_cell != peek.r_cell) {
                 fflush(stdin);
-                printf("\nGirare la tessera? Y/N: ");
+                printf("\nGirare la tessera? [Y/N] o [1/0]: ");
                 scanf("%c", &c);
-                if(c == 'y' || c == 'Y') {
+                if(c == 'y' || c == 'Y' || c == '1') {
                     peek = swapTessera(peek);
                     valid = true;
                 }
-                else if(c == 'n' || c == 'N')
+                // else if(c == 'n' || c == 'N' || c=='0')
+                else
                     valid = true;
             }
 
@@ -111,8 +113,9 @@ void soloGame() {
         fine = checkFine(field, hand);
     }
 
-    printf("\nFine della partita, non ci sono più mosse disponibili!\n");
-    printf("\nHai totalizzato un totale di %d punti!\n", contaPunti(field));
+    timespec_get(&tf, TIME_UTC);
+    printf("\n\nFine della partita, non ci sono più mosse disponibili!\n");
+    printf("\nHai totalizzato un totale di %d punti in %lds!\n", contaPunti(field), tf.tv_sec - ts.tv_sec);
     printField(field);
     printHand(hand);
     printf("\nPress any key to continue...");
@@ -165,34 +168,11 @@ void aiGame() {
 
 //  challenge
 void challenge() {
-    int n = 3, a = 2, b = 2;
-    node* hand = NULL;
-    node* current;
 
-    scanf("%d", &n);    //  <-----
+    node* hand = createHandChallenge();
 
-    for(int i = 0; i<n; i++) {
-        // /*       <-----
-        scanf("%d", &a);
-        scanf("%d", &b);
-        // */
-        if(hand == NULL) {
-            hand = (node*)malloc(sizeof(node));
-            hand->me = createTesseraValue(a,b);
-            hand->next = NULL;
-            current = hand;
-        }
-        else {
-            node* nodo = (node*)malloc(sizeof(node));
-            nodo->me = createTesseraValue(a,b);
-            nodo->next = NULL;
-            current->next = nodo;
-            current = current->next;
-        }
-    }
-
-    if(n > 0) {
-        result score = resolveChallenge(hand, (tessera){0,0}, (result){0,(char*)malloc(n*6+1)});
+    if(hand != NULL) {
+        result score = resolveChallenge(hand, (tessera){0,0}, (result){0,(char*)malloc(contaHand(hand)*6+1)});
 
         printf("%s", score.seq);
     }
