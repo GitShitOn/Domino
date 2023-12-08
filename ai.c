@@ -1,7 +1,7 @@
 #include "function.h"
 
 move findBestMove(node* field, node* hand, int score) {
-    move currentMove, bestMove = {{0,0},-1,0,-1};
+    move currentMove, bestMove = {{0,0},-1,0,-1};\
     node* head = hand;
     int i = 0;
     if(hand == NULL)
@@ -36,10 +36,11 @@ move findBestMove(node* field, node* hand, int score) {
 bool checkAndMake(node* field, node* hand, move* currentMove, int i, int score, int side) {
     if(isValidMove(field, currentMove->t, side)) {
         currentMove->score = findBestMove(
-                addToField(field,hand->me, side), 
+                addToField(copyNodes(field),hand->me, side), 
                 removeTessera(copyNodes(hand), i), 
                 score + valoreTessera(hand->me)
             ).score;
+        currentMove->side = side;
         return true;
     }
     return false;

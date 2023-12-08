@@ -132,18 +132,23 @@ node* addToField(node* field, tessera t, int side) {
 }
 
 node* copyNodes(node* nodes) {
-    node* copy = (node*)malloc(sizeof(node));
-    copy = NULL;
+    node* copy = NULL;
     node* head;
     if(nodes == NULL)
         return NULL;
     while(nodes != NULL) {
         if(copy == NULL) {
-            memcpy(copy, nodes, sizeof(node));
+            copy = (node*)malloc(sizeof(node));
+            copy->me = nodes->me;
+            copy->next = NULL;
             head = copy;
         }
         else {
-            memcpy(copy->next, head, sizeof(node));
+            node* nodo = (node*)malloc(sizeof(node));
+            nodo->me = nodes->me;
+            nodo->next = NULL;
+            copy->next = nodo;
+            copy = copy->next;
         }
         nodes = nodes->next;
     }

@@ -136,8 +136,13 @@ void aiGame() {
 
     printStartingHand(hand);
 
-    while(!fine) {
+    printf("\nNext...\n");
+    fflush(stdin);
+    scanf("%c",&stall);
+    fflush(stdin);
 
+    while(!fine) {
+        
         bestMove = findBestMove(field, hand, 0);
 
         field = addToField(field, bestMove.t, bestMove.side);
