@@ -5,7 +5,7 @@ move findBestMove(node* field, node* hand, int score) {
     node* head = hand;
     int i = 0;
     if(hand == NULL)
-        return (move){{0,0}, 0, score, 0};
+        return (move){{0,0}, -1, score, 0};
     while(hand != NULL) {
         currentMove.n = i;
         
