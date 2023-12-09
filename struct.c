@@ -24,7 +24,7 @@ typedef struct {
     char* seq;
 } result;
 
-// tessera t, int n, int score, int side, int gira
+// tessera t, int n, int score, int side
 typedef struct {
     tessera t;
     int n;

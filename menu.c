@@ -131,7 +131,6 @@ void aiGame() {
     node* field = (node*)malloc(sizeof(node));
     field = NULL;
     move bestMove;
-
     bool fine = false;
 
     printStartingHand(hand);
@@ -143,12 +142,11 @@ void aiGame() {
 
     while(!fine) {
         
-        bestMove = findBestMove(field, hand, 0);
+        bestMove = findBestMove2(field, hand, 0);
 
-        if(bestMove.n != -1) {
-            field = addToField(field, bestMove.t, bestMove.side);
-            hand = removeTessera(hand, bestMove.n);
-        }
+        field = addToField(field, bestMove.t, bestMove.side);
+        hand = removeTessera(hand, bestMove.n);
+        
 
         fine = checkFine(field, hand); 
 

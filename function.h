@@ -81,3 +81,9 @@ result resolveChallenge(node*, tessera, result);
 move findBestMove(node*, node*, int);
 
 bool checkAndMake(node*, node*, move*, int, int, int);
+
+move findBestMove2(node*, node*, int);
+
+move makeCurrentMove(tessera, int, int ,int);
+
+int calcMove(node*, node*, move);
