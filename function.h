@@ -8,6 +8,7 @@
 
 #define dx 0
 #define sx 1
+#define AI_LIMIT 999
 
 //  "menu.c"
 

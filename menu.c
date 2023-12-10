@@ -180,6 +180,7 @@ void challenge() {
     field = NULL;
     move bestMove;
     bool start = true, fine = false;
+    int i = 0;
 
     /*
     if(hand != NULL) {
@@ -191,7 +192,7 @@ void challenge() {
 
    //copia di ai
 
-   while(!fine) {
+   while(!fine && i < AI_LIMIT) {
 
     bestMove = findBestMoveNoFlip(field, hand, 0);
 
@@ -212,5 +213,6 @@ void challenge() {
 
     fine = checkFine(field, hand);
     
+    i++;
    }
 }
