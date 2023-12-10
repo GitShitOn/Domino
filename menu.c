@@ -142,7 +142,7 @@ void aiGame() {
 
     while(!fine) {
         
-        bestMove = findBestMove2(field, hand, 0);
+        bestMove = findBestMove(field, hand, 0);
         
         if(bestMove.n != -1) {
             field = addToField(field, bestMove.t, bestMove.side);
@@ -176,10 +176,41 @@ void aiGame() {
 void challenge() {
 
     node* hand = createHandChallenge();
+    node* field = (node*)malloc(sizeof(node));
+    field = NULL;
+    move bestMove;
+    bool start = true, fine = false;
 
+    /*
     if(hand != NULL) {
         result score = resolveChallenge(hand, (tessera){0,0}, (result){0,(char*)malloc(contaHand(hand)*6+1)});
 
         printf("%s", score.seq);
     }
+    */
+
+   //copia di ai
+
+   while(!fine) {
+
+    bestMove = findBestMoveNoFlip(field, hand, 0);
+
+    if(bestMove.n != -1) {
+        field = addToField(field, bestMove.t, bestMove.side);
+        hand = removeTessera(hand, bestMove.n);
+
+        if(start) {
+            printf("S ");
+            start = false;
+        }
+
+        printf("%d %d ", bestMove.t.l_cell, bestMove.t.r_cell);
+
+        if(!start)
+            printf("%c ", bestMove.side == dx ? 'R' : 'L');
+    }
+
+    fine = checkFine(field, hand);
+    
+   }
 }
