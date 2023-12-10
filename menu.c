@@ -143,10 +143,11 @@ void aiGame() {
     while(!fine) {
         
         bestMove = findBestMove2(field, hand, 0);
-
-        field = addToField(field, bestMove.t, bestMove.side);
-        hand = removeTessera(hand, bestMove.n);
         
+        if(bestMove.n != -1) {
+            field = addToField(field, bestMove.t, bestMove.side);
+            hand = removeTessera(hand, bestMove.n);
+        }
 
         fine = checkFine(field, hand); 
 

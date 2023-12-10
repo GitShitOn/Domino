@@ -50,7 +50,7 @@ bool checkAndMake(node* field, node* hand, move* currentMove, int i, int score, 
 
 move findBestMove2(node* field, node* hand, int score) {
     node* head = hand;
-    move currentMove, bestMove = {{0,0},-1,-1,-1};
+    move currentMove, bestMove = {{0,0},-1,score,-1};
     int i = 0;
 
     while(hand != NULL) {
@@ -110,3 +110,5 @@ int calcMove(node* field, node* hand, move currentMove) {
     }
     return -1;
 }
+
+// bug se non si riesce a trovare una sequenza con tutte le mosse

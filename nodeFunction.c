@@ -6,7 +6,7 @@ node* createHand() {
     node* hand = NULL;
     node* current = NULL;
 
-    /*       <----
+    // /*       <----
     do {
         printf("\nScegliere il numero di tessere: ");
         scanf("%d",&n);
