@@ -123,8 +123,10 @@ void soloGame() {
     scanf("%c",&c);
     fflush(stdin);
 
-    free_nodes(field);
-    free_nodes(hand);
+    if(!field)
+        free_nodes(field);
+    if(!hand)
+        free_nodes(hand);
 }
 
 //  ai game
@@ -173,8 +175,10 @@ void aiGame() {
     scanf("%c",&stall);
     fflush(stdin);
 
-    free_nodes(field);
-    free_nodes(hand);
+    if(!field)
+        free_nodes(field);
+    if(!hand)
+        free_nodes(hand);
 }
 
 //  challenge
@@ -197,30 +201,33 @@ void challenge() {
 
    //copia di ai
 
-   while(!fine && i < AI_LIMIT) {
+    while(!fine && i < AI_LIMIT) {
 
-    bestMove = findBestMoveChallenge(field, hand, 0);
+        bestMove = findBestMoveChallenge(field, hand, 0);
 
-    if(bestMove.n != -1) {
-        field = addToField(field, bestMove.t, bestMove.side);
-        hand = removeTessera(hand, bestMove.n);
+        if(bestMove.n != -1) {
+            field = addToField(field, bestMove.t, bestMove.side);
+            hand = removeTessera(hand, bestMove.n);
 
-        if(start) {
-            printf("S ");
-            start = false;
+            if(start) {
+                printf("S ");
+                start = false;
+            }
+
+            printf("%d %d ", bestMove.t.l_cell, bestMove.t.r_cell);
+
+            if(!start)
+                printf("%c ", bestMove.side == dx ? 'R' : 'L');
         }
 
-        printf("%d %d ", bestMove.t.l_cell, bestMove.t.r_cell);
-
-        if(!start)
-            printf("%c ", bestMove.side == dx ? 'R' : 'L');
+        fine = checkFine(field, hand);
+        
+        i++;
     }
 
-    fine = checkFine(field, hand);
+    if(field != NULL)
+        free_nodes(field);
     
-    i++;
-    }   
-
-    free_nodes(field);
-    free_nodes(hand);
+    if(!hand)
+        free_nodes(hand);
 }

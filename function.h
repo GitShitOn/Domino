@@ -56,6 +56,8 @@ int printPossibleMoves(node*);
 
 void printMossa(move);
 
+void print_debug();
+
 
 //  "util.c"
 

@@ -51,7 +51,7 @@ move findBestMoveChallenge(node* field, node* hand, int score) {
     move currentMove, bestMove = {{0,0},-1,score,-1};
     int i = 0;
 
-    while(hand != NULL) {
+    while(!hand) {
         // dx - noFlip
         currentMove = makeCurrentMove(hand->me, i, score, dx);
         currentMove.score = calcMove(field, head, currentMove);

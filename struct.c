@@ -1,5 +1,4 @@
 
-
 // int l_cell, int r_cell
 typedef struct {
     int l_cell;
@@ -26,10 +25,13 @@ typedef struct {
     char* seq;
 } result;
 
+
+typedef int side_t;
+
 // tessera t, int n, int score, int side
 typedef struct {
     tessera t;
     int n;
     int score;
-    int side;
+    side_t side;
 } move;

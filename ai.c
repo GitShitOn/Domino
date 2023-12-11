@@ -46,7 +46,7 @@ move findBestMove(node* field, node* hand, int score) {
 }
 
 // solo score, viene calcolato lo score totale in automatico
-move makeCurrentMove(tessera t, int n, int score, int side) {
+move makeCurrentMove(tessera t, int n, int score, side_t side) {
     return (move) {t, n, score + valoreTessera(t), side};
 }
 
