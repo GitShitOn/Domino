@@ -5,10 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #define dx 0
 #define sx 1
-#define AI_LIMIT 999
+#define AI_DEPTH 8.0
 #define jolly 0
 #define plus_one 11
 #define mirror_l 12
@@ -81,6 +82,8 @@ int valoreTessera(tessera);
 
 int contaHand(node*);
 
+int contaJolly(node*);
+
 void makeMove(node**, node**, move);
 
 
@@ -101,8 +104,10 @@ tessera mirrorTessera(node*, side_t);
 
 //  "ai.c"
 
-move findBestMove(node*, node*, int);
+move findBestMove(node*, node*, int, int);
 
-move makeCurrentMove(tessera, int, int ,int);
+move createCurrentMove(tessera, int, int ,int);
 
-int calcMove(node*, node*, move);
+int calcMove(node*, node*, move, int);
+
+int calcDepth(node*);

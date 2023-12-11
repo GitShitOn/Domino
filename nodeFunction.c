@@ -73,8 +73,8 @@ tessera createTessera() {
 // Crea una tessera e la restituisce
 tessera createTesseraSpecial() {
     tessera t;
-    switch(rand()%9 + 1) {
-        case 1: // jolly
+    switch((rand()%10) + 1) {
+        case -1: // jolly
             t = (tessera) {jolly, jolly};
             break;
         case 2: // plus_one
@@ -83,7 +83,7 @@ tessera createTesseraSpecial() {
         case 3: // mirror
             t = (tessera) {mirror_l, mirror_r};
             break;
-        default:    // 1-6
+        default:    // tessere normali
             t = (tessera){rand()%6+1, rand()%6+1};
             break;
     }
@@ -136,7 +136,7 @@ node* removeTessera(node* hand, int n) {
 }
 
 //
-node* addToField(node* field, tessera t, int side) {
+node* addToField(node* field, tessera t, side_t side) {
     node* head = (node*)malloc(sizeof(node));
     head->me = t;
     if(field == NULL) {
@@ -155,6 +155,8 @@ node* addToField(node* field, tessera t, int side) {
         field->next = head;
         return fHead;
     }
+    // print_debug();
+    // printf("side: %d", side);
     return NULL;
 }
 

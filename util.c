@@ -11,6 +11,8 @@ bool isValidMove(node* field, tessera t, side_t side) {
     }
     
     //check x challenge - mirror
+    if(t.l_cell == mirror_r && t.r_cell == mirror_l)
+        return false;
     if(t.l_cell == mirror_l && t.r_cell == mirror_r) {
         if(field != NULL)
             return true;
@@ -95,6 +97,16 @@ int contaHand(node* hand) {
         i++;
     }
     return ++i;
+}
+
+int contaJolly(node* hand) {
+    int i = 0;
+    while(hand != NULL) {
+        if(hand->me.l_cell == jolly)
+            i++;
+        hand = hand->next;
+    }
+    return i;
 }
 
 int valoreTessera(tessera t) {

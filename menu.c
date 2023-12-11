@@ -152,11 +152,11 @@ void aiGame() {
 
     while(!fine) {
 
-        bestMove = findBestMove(field, hand, 0);
+        bestMove = findBestMove(field, hand, 0, calcDepth(hand));
         
         makeMove(&field, &hand, bestMove);
 
-        fine = checkFine(field, hand); 
+        fine = checkFine(field, hand);
 
         printMossa(bestMove);
         printField(field);
@@ -194,26 +194,24 @@ void challenge() {
 
     while(!fine) {
 
-        bestMove = findBestMoveChallenge(field, hand, 0);
+        bestMove = findBestMove(field, hand, 0, AI_DEPTH);
 
-        if(bestMove.n != -1) {
-            // conversione delle tessere speciali
-            copyBestMove = bestMove;
+        // conversione delle tessere speciali
+        copyBestMove = bestMove;
 
-            // aggiunta al campo e rimozione dalla mano
-            makeMove(&field, &hand, bestMove);
+        // aggiunta al campo e rimozione dalla mano
+        makeMove(&field, &hand, bestMove);
 
-            // print della mossa
-            if(start) {
-                printf("S ");
-                start = false;
-            }
-            else 
-                printf("%c ", copyBestMove.side == dx ? 'R' : 'L');
-
-            printf("%d %d ", copyBestMove.t.l_cell, copyBestMove.t.r_cell);
-
+        // print della mossa
+        if(start) {
+            printf("S ");
+            start = false;
         }
+        else 
+            printf("%c ", copyBestMove.side == dx ? 'R' : 'L');
+
+        printf("%d %d ", copyBestMove.t.l_cell, copyBestMove.t.r_cell);
+
 
         fine = checkFine(field, hand);
     }
