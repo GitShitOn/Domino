@@ -200,15 +200,6 @@ void challenge() {
             // conversione delle tessere speciali
             copyBestMove = bestMove;
 
-            if(bestMove.t.l_cell == plus_one) {
-                field = fieldPlusOne(field);
-                bestMove.t = makePlusOne(field, bestMove.side);
-            }
-
-            if(bestMove.t.l_cell == mirror_l) {
-                bestMove.t = mirrorTessera(field, bestMove.side);
-            }
-
             // aggiunta al campo e rimozione dalla mano
             makeMove(&field, &hand, bestMove);
 
