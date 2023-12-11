@@ -74,7 +74,7 @@ tessera createTessera() {
 tessera createTesseraSpecial() {
     tessera t;
     switch((rand()%10) + 1) {
-        case -1: // jolly
+        case 1: // jolly
             t = (tessera) {jolly, jolly};
             break;
         case 2: // plus_one
