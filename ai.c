@@ -13,7 +13,7 @@ move findBestMove(node* field, node* hand, int score) {
             if(bestMove.score < currentMove.score)
                 bestMove = currentMove;
         }
-
+        
         // sx - noFlip
         currentMove = makeCurrentMove(hand->me, i, score, sx);
         currentMove.score = calcMove(field, head, currentMove);
@@ -63,23 +63,24 @@ int calcMove(node* field, node* hand, move currentMove) {
     }
     return -1;
 }
-*/
+// */
 
-
+// /*
 int calcMove(node* field, node* hand, move currentMove) {
     if(isValidMove(field, currentMove.t, currentMove.side)) {
         if(hand->next == NULL)
             return currentMove.score;
-        nodes* fCopy = copyNodes(field);
-        nodes* hCopy = copyNodes(hand);
+        node* fCopy = copyNodes(field);
+        node* hCopy = copyNodes(hand);
         int bestMoveScore = findBestMove(
             addToField(fCopy, currentMove.t, currentMove.side),
             removeTessera(hCopy, currentMove.n),
             currentMove.score
-            ).score;
+        ).score;
         free_nodes(fCopy);
         free_nodes(hCopy);
         return bestMoveScore;
     }
     return -1;
 }
+// */

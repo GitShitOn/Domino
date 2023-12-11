@@ -3,7 +3,7 @@
 //  menu
 void menu() {
     bool play = true;
-    int scelta = 1;
+    int scelta = 2;
 
     while(play) {
         printf("\n\nBenvenuto!\n\n");
@@ -108,7 +108,7 @@ void soloGame() {
         } while(!validMove);
 
         field = addToField(field, peek, side);
-        removeTessera(hand, n);
+        hand = removeTessera(hand, n);
 
         fine = checkFine(field, hand);
     }
@@ -144,7 +144,7 @@ void aiGame() {
     fflush(stdin);
 
     while(!fine) {
-        
+
         bestMove = findBestMove(field, hand, 0);
         
         if(bestMove.n != -1) {

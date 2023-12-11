@@ -85,7 +85,7 @@ node* removeTessera(node* hand, int n) {
 
     // se 0 ritorna il prossimo
     if(!n) {
-        nodes* next = hand->next;
+        node* next = hand->next;
         free(hand);
         return next;
     }
@@ -108,7 +108,7 @@ node* removeTessera(node* hand, int n) {
         return head;
     }
 
-    nodes* next = hand->next->next;
+    node* next = (node*)hand->next->next;
     free(hand->next);
     hand->next = next;
 
@@ -163,7 +163,7 @@ node* copyNodes(node* nodes) {
 }
 
 void free_nodes(node* nodes) {
-    if(nodes) {
+    if(!nodes) {
         free_nodes(nodes->next);
         free(nodes);
     }

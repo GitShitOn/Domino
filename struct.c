@@ -12,11 +12,13 @@ typedef struct node {
     struct node* next;
 } node;
 
+/*
 // node* field, node* hand
 typedef struct {
     node* field;
     node* hand;
 } nodes;
+*/
 
 // int score, char* seq
 typedef struct {
