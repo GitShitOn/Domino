@@ -175,9 +175,9 @@ void aiGame() {
     scanf("%c",&stall);
     fflush(stdin);
 
-    if(!field)
+    if(field != NULL)
         free_nodes(field);
-    if(!hand)
+    if(hand != NULL)
         free_nodes(hand);
 }
 
@@ -191,21 +191,12 @@ void challenge() {
     bool start = true, fine = false;
     int i = 0;
 
-    /*
-    if(hand != NULL) {
-        result score = resolveChallenge(hand, (tessera){0,0}, (result){0,(char*)malloc(contaHand(hand)*6+1)});
-
-        printf("%s", score.seq);
-    }
-    */
-
-   //copia di ai
-
     while(!fine && i < AI_LIMIT) {
 
         bestMove = findBestMoveChallenge(field, hand, 0);
 
         if(bestMove.n != -1) {
+
             field = addToField(field, bestMove.t, bestMove.side);
             hand = removeTessera(hand, bestMove.n);
 
@@ -213,11 +204,11 @@ void challenge() {
                 printf("S ");
                 start = false;
             }
+            else 
+                printf("%c ", bestMove.side == dx ? 'R' : 'L');
 
             printf("%d %d ", bestMove.t.l_cell, bestMove.t.r_cell);
 
-            if(!start)
-                printf("%c ", bestMove.side == dx ? 'R' : 'L');
         }
 
         fine = checkFine(field, hand);
@@ -228,6 +219,6 @@ void challenge() {
     if(field != NULL)
         free_nodes(field);
     
-    if(!hand)
+    if(hand != NULL)
         free_nodes(hand);
 }

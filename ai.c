@@ -77,8 +77,11 @@ int calcMove(node* field, node* hand, move currentMove) {
             removeTessera(hCopy, currentMove.n),
             currentMove.score
         ).score;
-        free_nodes(fCopy);
-        free_nodes(hCopy);
+
+        if(fCopy != NULL)
+            free_nodes(fCopy);
+        if(hCopy != NULL)
+            free_nodes(hCopy);
         return bestMoveScore;
     }
     return -1;
