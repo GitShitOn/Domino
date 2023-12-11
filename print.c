@@ -55,7 +55,7 @@ int printPossibleMoves(node* hand) {
 }
 
 void printMossa(move mossa) {
-    printf("\nGiocata la tessera [%d|%d] a %s!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side==dx?"dx":"sx");
+    printf("\nGiocata la tessera [%d|%d] %s a %s!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side==dx?"dx":"sx");
     // printf("\nGiocata la tessera [%d|%d] a %d!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side);
 }
 

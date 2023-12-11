@@ -113,8 +113,8 @@ int calcDepth(node* hand) {
     dep = ceil(dep / (contaJolly(hand)+1));
 
     while(max > AI_DEPTH) {
-        max = max / 2;
-        dep = ceil(dep / 2.0);
+        max = max / 3;
+        dep = ceil(dep / 3.0);
     }
     // printf("\nDepth: %d", (int)dep);
     return (int)dep;
