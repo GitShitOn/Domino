@@ -36,6 +36,17 @@ int printPossibleMoves(node* hand) {
         while(hand != NULL) {
             count++;
             printf("\n%d - [%d|%d]", count, hand->me.l_cell, hand->me.r_cell);
+            switch(hand->me.l_cell) {
+                case jolly:
+                    printf("\t(Jolly)");
+                    break;
+                case plus_one:
+                    printf("\t(Field +1)");
+                    break;
+                case mirror_l:
+                    printf("\t(Mirror)");
+                    break;
+            }
             hand = hand->next;
         }
         printf("\n\nScelta: ");

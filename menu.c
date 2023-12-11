@@ -81,10 +81,11 @@ void soloGame() {
 
             peek = peekHand(hand, n);
 
-            while(!valid && peek.l_cell != peek.r_cell) {
+            while(!valid && peek.l_cell != peek.r_cell && peek.r_cell != mirror_r) {
                 fflush(stdin);
-                printf("\nGirare la tessera? [Y/N] o [1/0]: ");
+                printf("\nGirare la tessera? [Y/n] o [1/0]: ");
                 scanf("%c", &c);
+                fflush(stdin);
                 if(c == 'y' || c == 'Y' || c == '1') {
                     peek = swapTessera(peek);
                     valid = true;
@@ -97,6 +98,7 @@ void soloGame() {
             while(side != 0 && side != 1 && field != NULL) {
                 printf("\nScegliere il lato [Sinistra(%d) | Destra(%d)]: ", sx, dx);
                 scanf("%d", &side);
+                fflush(stdin);
             }
             // */
             
@@ -107,8 +109,10 @@ void soloGame() {
 
         } while(!validMove);
 
-        field = addToField(field, peek, side);
-        hand = removeTessera(hand, n);
+        makeMove(&field, &hand, (move){peek, n, -1, side});
+
+        // field = addToField(field, peek, side);
+        // hand = removeTessera(hand, n);
 
         fine = checkFine(field, hand);
     }
@@ -123,9 +127,9 @@ void soloGame() {
     scanf("%c",&c);
     fflush(stdin);
 
-    if(!field)
+    if(field != NULL)
         free_nodes(field);
-    if(!hand)
+    if(hand != NULL)
         free_nodes(hand);
 }
 
@@ -149,10 +153,7 @@ void aiGame() {
 
         bestMove = findBestMove(field, hand, 0);
         
-        if(bestMove.n != -1) {
-            field = addToField(field, bestMove.t, bestMove.side);
-            hand = removeTessera(hand, bestMove.n);
-        }
+        makeMove(&field, &hand, bestMove);
 
         fine = checkFine(field, hand); 
 
@@ -189,9 +190,8 @@ void challenge() {
     field = NULL;
     move bestMove, copyBestMove;
     bool start = true, fine = false;
-    int i = 0;
 
-    while(!fine && i < AI_LIMIT) {
+    while(!fine) {
 
         bestMove = findBestMoveChallenge(field, hand, 0);
 
@@ -209,8 +209,7 @@ void challenge() {
             }
 
             // aggiunta al campo e rimozione dalla mano
-            field = addToField(field, bestMove.t, bestMove.side);
-            hand = removeTessera(hand, bestMove.n);
+            makeMove(&field, &hand, bestMove);
 
             // print della mossa
             if(start) {
@@ -225,8 +224,6 @@ void challenge() {
         }
 
         fine = checkFine(field, hand);
-        
-        i++;
     }
 
     if(field != NULL)

@@ -100,3 +100,18 @@ int contaHand(node* hand) {
 int valoreTessera(tessera t) {
     return (t.l_cell+t.r_cell);
 }
+
+void makeMove(node** field, node** hand, move bestMove) {
+    if(bestMove.t.l_cell == plus_one) {
+        *field = fieldPlusOne(*field);
+        bestMove.t = makePlusOne(*field, bestMove.side);
+    }
+
+    if(bestMove.t.l_cell == mirror_l) {
+        bestMove.t = mirrorTessera(*field, bestMove.side);
+    }
+
+    // aggiunta al campo e rimozione dalla mano
+    *field = addToField(*field, bestMove.t, bestMove.side);
+    *hand = removeTessera(*hand, bestMove.n);
+}

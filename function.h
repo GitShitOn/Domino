@@ -33,6 +33,8 @@ node* createHandChallenge();
 
 tessera createTessera();
 
+tessera createTesseraSpecial();
+
 tessera createTesseraValue(int, int);
 
 node* removeTessera(node*, int);
@@ -79,6 +81,8 @@ int valoreTessera(tessera);
 
 int contaHand(node*);
 
+void makeMove(node**, node**, move);
+
 
 //  "challenge.c"
 
@@ -88,7 +92,7 @@ move findBestMoveChallenge(node*, node*, int);
 
 int calcMoveChallenge(node*, node*, move);
 
-tessera makePlusOne(node* , side_t);
+tessera makePlusOne(node*, side_t);
 
 node* fieldPlusOne(node*);
 

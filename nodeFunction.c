@@ -16,14 +16,14 @@ node* createHand() {
     for(int i = 0;i<n;i++) {
         if(hand == NULL) {
             hand = (node*)malloc(sizeof(node));
-            hand->me = createTessera();
+            hand->me = createTesseraSpecial();
             // hand->me = createTesseraValue(3,3);
             hand->next = NULL;
             current = hand;
         }
         else {
             node* nodo = (node*)malloc(sizeof(node));
-            nodo->me = createTessera();
+            nodo->me = createTesseraSpecial();
             // nodo->me = createTesseraValue(3,3);
             nodo->next = NULL;
             current->next = nodo;
@@ -67,6 +67,26 @@ node* createHandChallenge() {
 // Crea una tessera e la restituisce
 tessera createTessera() {
     tessera t = {rand()%6+1, rand()%6+1};
+    return t;
+}
+
+// Crea una tessera e la restituisce
+tessera createTesseraSpecial() {
+    tessera t;
+    switch(rand()%9 + 1) {
+        case 1: // jolly
+            t = (tessera) {jolly, jolly};
+            break;
+        case 2: // plus_one
+            t = (tessera) {plus_one, plus_one};
+            break;
+        case 3: // mirror
+            t = (tessera) {mirror_l, mirror_r};
+            break;
+        default:    // 1-6
+            t = (tessera){rand()%6+1, rand()%6+1};
+            break;
+    }
     return t;
 }
 
