@@ -47,9 +47,10 @@ void soloGame() {
     char c;
     bool fine = false;
     bool validMove = false;
-    bool valid;
+    bool validSwap;
     int maxHand = 0;
-    int n, side;
+    int n;
+    side_t side;
     struct timespec ts;
     struct timespec tf;
     timespec_get(&ts, TIME_UTC);
@@ -63,7 +64,7 @@ void soloGame() {
 
         do {
             side = -1;
-            valid = false;
+            validSwap = false;
 
             if(field != NULL)
                 printField(field);
@@ -81,18 +82,18 @@ void soloGame() {
 
             peek = peekHand(hand, n);
 
-            while(!valid && peek.l_cell != peek.r_cell && peek.r_cell != mirror_r) {
+            while(!validSwap && peek.l_cell != peek.r_cell && peek.r_cell != mirror_r) {
                 fflush(stdin);
                 printf("\nGirare la tessera? [Y/n] o [1/0]: ");
                 scanf("%c", &c);
                 fflush(stdin);
                 if(c == 'y' || c == 'Y' || c == '1') {
                     peek = swapTessera(peek);
-                    valid = true;
+                    validSwap = true;
                 }
                 // else if(c == 'n' || c == 'N' || c=='0')
                 else
-                    valid = true;
+                    validSwap = true;
             }
 
             while(side != 0 && side != 1 && field != NULL) {
