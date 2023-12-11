@@ -187,7 +187,7 @@ void challenge() {
     node* hand = createHandChallenge();
     node* field = (node*)malloc(sizeof(node));
     field = NULL;
-    move bestMove;
+    move bestMove, copyBestMove;
     bool start = true, fine = false;
     int i = 0;
 
@@ -196,18 +196,31 @@ void challenge() {
         bestMove = findBestMoveChallenge(field, hand, 0);
 
         if(bestMove.n != -1) {
+            // conversione delle tessere speciali
+            copyBestMove = bestMove;
 
+            if(bestMove.t.l_cell == plus_one) {
+                field = fieldPlusOne(field);
+                bestMove.t = makePlusOne(field, bestMove.side);
+            }
+
+            if(bestMove.t.l_cell == mirror_l) {
+                bestMove.t = mirrorTessera(field, bestMove.side);
+            }
+
+            // aggiunta al campo e rimozione dalla mano
             field = addToField(field, bestMove.t, bestMove.side);
             hand = removeTessera(hand, bestMove.n);
 
+            // print della mossa
             if(start) {
                 printf("S ");
                 start = false;
             }
             else 
-                printf("%c ", bestMove.side == dx ? 'R' : 'L');
+                printf("%c ", copyBestMove.side == dx ? 'R' : 'L');
 
-            printf("%d %d ", bestMove.t.l_cell, bestMove.t.r_cell);
+            printf("%d %d ", copyBestMove.t.l_cell, copyBestMove.t.r_cell);
 
         }
 

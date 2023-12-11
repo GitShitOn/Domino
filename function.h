@@ -9,6 +9,10 @@
 #define dx 0
 #define sx 1
 #define AI_LIMIT 999
+#define jolly 0
+#define plus_one 11
+#define mirror_l 12
+#define mirror_r 21
 
 //  "menu.c"
 
@@ -61,7 +65,7 @@ void print_debug();
 
 //  "util.c"
 
-bool isValidMove(node*, tessera, int);
+bool isValidMove(node*, tessera, side_t);
 
 tessera peekHand(node*, int);
 
@@ -81,6 +85,16 @@ int contaHand(node*);
 result resolveChallenge(node*, tessera, result);
 
 move findBestMoveChallenge(node*, node*, int);
+
+int calcMoveChallenge(node*, node*, move);
+
+tessera makePlusOne(node* , side_t);
+
+node* fieldPlusOne(node*);
+
+tessera mirrorTessera(node*, side_t);
+
+bool isValidMoveChallenge(node*, tessera, side_t);
 
 
 //  "ai.c"

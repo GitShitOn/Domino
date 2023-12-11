@@ -1,15 +1,15 @@
 #include "function.h"
 
 // controlla se una mossa è valida
-bool isValidMove(node* field, tessera t, int side) {
+bool isValidMove(node* field, tessera t, side_t side) {
+    
     if(field == NULL)
         return true;
-    if(t.l_cell == 0 && t.r_cell == 0)
-        return true;
+    
     if(side == sx) {
         if(field->me.l_cell == t.r_cell)
             return true;
-        if(field->me.l_cell == 0)
+        if(field->me.l_cell == jolly)
             return true;
     }
     else if(side == dx) {
@@ -17,7 +17,7 @@ bool isValidMove(node* field, tessera t, int side) {
             field = field->next;
         if(field->me.r_cell == t.l_cell)
             return true;
-        if(field->me.r_cell == 0)
+        if(field->me.r_cell == jolly)
             return true;
     }
     return false;

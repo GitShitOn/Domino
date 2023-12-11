@@ -72,6 +72,7 @@ int calcMove(node* field, node* hand, move currentMove) {
             return currentMove.score;
         node* fCopy = copyNodes(field);
         node* hCopy = copyNodes(hand);
+
         int bestMoveScore = findBestMove(
             addToField(fCopy, currentMove.t, currentMove.side),
             removeTessera(hCopy, currentMove.n),
