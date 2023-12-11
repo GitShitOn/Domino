@@ -50,6 +50,7 @@ move makeCurrentMove(tessera t, int n, int score, int side) {
     return (move) {t, n, score + valoreTessera(t), side};
 }
 
+/*  senza free
 int calcMove(node* field, node* hand, move currentMove) {
     if(isValidMove(field, currentMove.t, currentMove.side)) {
         if(hand->next == NULL)
@@ -59,6 +60,26 @@ int calcMove(node* field, node* hand, move currentMove) {
             removeTessera(copyNodes(hand), currentMove.n),
             currentMove.score
             ).score;
+    }
+    return -1;
+}
+*/
+
+
+int calcMove(node* field, node* hand, move currentMove) {
+    if(isValidMove(field, currentMove.t, currentMove.side)) {
+        if(hand->next == NULL)
+            return currentMove.score;
+        nodes* fCopy = copyNodes(field);
+        nodes* hCopy = copyNodes(hand);
+        int bestMoveScore = findBestMove(
+            addToField(fCopy, currentMove.t, currentMove.side),
+            removeTessera(hCopy, currentMove.n),
+            currentMove.score
+            ).score;
+        free_nodes(fCopy);
+        free_nodes(hCopy);
+        return bestMoveScore;
     }
     return -1;
 }

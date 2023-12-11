@@ -122,6 +122,9 @@ void soloGame() {
     fflush(stdin);
     scanf("%c",&c);
     fflush(stdin);
+
+    free_nodes(field);
+    free_nodes(hand);
 }
 
 //  ai game
@@ -170,6 +173,8 @@ void aiGame() {
     scanf("%c",&stall);
     fflush(stdin);
 
+    free_nodes(field);
+    free_nodes(hand);
 }
 
 //  challenge
@@ -194,7 +199,7 @@ void challenge() {
 
    while(!fine && i < AI_LIMIT) {
 
-    bestMove = findBestMoveNoFlip(field, hand, 0);
+    bestMove = findBestMoveChallenge(field, hand, 0);
 
     if(bestMove.n != -1) {
         field = addToField(field, bestMove.t, bestMove.side);
@@ -214,5 +219,8 @@ void challenge() {
     fine = checkFine(field, hand);
     
     i++;
-   }
+    }   
+
+    free_nodes(field);
+    free_nodes(hand);
 }

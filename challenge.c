@@ -46,7 +46,7 @@ result resolveChallenge(node* hand, tessera t, result score) {
     return best_score;
 }
 
-move findBestMoveNoFlip(node* field, node* hand, int score) {
+move findBestMoveChallenge(node* field, node* hand, int score) {
     node* head = hand;
     move currentMove, bestMove = {{0,0},-1,score,-1};
     int i = 0;

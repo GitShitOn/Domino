@@ -37,6 +37,8 @@ node* addToField(node*, tessera, int);
 
 node* copyNodes(node*);
 
+void free_nodes(node*);
+
 
 //  "print.c"
 
@@ -76,7 +78,7 @@ int contaHand(node*);
 
 result resolveChallenge(node*, tessera, result);
 
-move findBestMoveNoFlip(node*, node*, int);
+move findBestMoveChallenge(node*, node*, int);
 
 
 //  "ai.c"

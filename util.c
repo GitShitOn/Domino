@@ -4,14 +4,20 @@
 bool isValidMove(node* field, tessera t, int side) {
     if(field == NULL)
         return true;
+    if(t.l_cell == 0 && t.r_cell == 0)
+        return true;
     if(side == sx) {
         if(field->me.l_cell == t.r_cell)
+            return true;
+        if(field->me.l_cell == 0)
             return true;
     }
     else if(side == dx) {
         while(field->next != NULL)
             field = field->next;
         if(field->me.r_cell == t.l_cell)
+            return true;
+        if(field->me.r_cell == 0)
             return true;
     }
     return false;
