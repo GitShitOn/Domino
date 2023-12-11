@@ -94,8 +94,6 @@ node* fieldPlusOne(node*);
 
 tessera mirrorTessera(node*, side_t);
 
-bool isValidMoveChallenge(node*, tessera, side_t);
-
 
 //  "ai.c"
 

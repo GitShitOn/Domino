@@ -2,10 +2,29 @@
 
 // controlla se una mossa è valida
 bool isValidMove(node* field, tessera t, side_t side) {
+    //check x challenge - plus one
+    if(t.l_cell == plus_one && t.r_cell == plus_one) {
+        if(field != NULL)
+            return true;
+        else
+            return false;
+    }
     
+    //check x challenge - mirror
+    if(t.l_cell == mirror_l && t.r_cell == mirror_r) {
+        if(field != NULL)
+            return true;
+        else
+            return false;
+    }
+
     if(field == NULL)
         return true;
     
+    // check x challenge - jolly
+    if(t.l_cell == jolly && t.r_cell == jolly)
+        return true;
+
     if(side == sx) {
         if(field->me.l_cell == t.r_cell)
             return true;

@@ -33,7 +33,7 @@ move findBestMoveChallenge(node* field, node* hand, int score) {
 // copia di calcMove di ai per challenge
 int calcMoveChallenge(node* field, node* hand, move currentMove) {
 
-    if(isValidMoveChallenge(field, currentMove.t, currentMove.side)) {
+    if(isValidMove(field, currentMove.t, currentMove.side)) {
         if(hand->next == NULL)
             return currentMove.score;
         node* fCopy = copyNodes(field);
@@ -96,43 +96,3 @@ tessera mirrorTessera(node* field, side_t side) {
     return (tessera) {field->me.r_cell, field->me.l_cell};
 }
 
-bool isValidMoveChallenge(node* field, tessera t, side_t side) {
-    //check x challenge - plus one
-    if(t.l_cell == plus_one && t.r_cell == plus_one) {
-        if(field != NULL)
-            return true;
-        else
-            return false;
-    }
-    
-    //check x challenge - mirror
-    if(t.l_cell == mirror_l && t.r_cell == mirror_r) {
-        if(field != NULL)
-            return true;
-        else
-            return false;
-    }
-
-    if(field == NULL)
-        return true;
-    
-    // check x challenge - jolly
-    if(t.l_cell == jolly && t.r_cell == jolly)
-        return true;
-
-    if(side == sx) {
-        if(field->me.l_cell == t.r_cell)
-            return true;
-        if(field->me.l_cell == jolly)
-            return true;
-    }
-    else if(side == dx) {
-        while(field->next != NULL)
-            field = field->next;
-        if(field->me.r_cell == t.l_cell)
-            return true;
-        if(field->me.r_cell == jolly)
-            return true;
-    }
-    return false;
-}
