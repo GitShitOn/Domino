@@ -46,4 +46,5 @@ typedef struct {
     int score;
     side_t side;
     vertical_t vertical;
+    int row;
 } move;

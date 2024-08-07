@@ -44,7 +44,7 @@ tessera createTesseraValue(int, int);
 
 node* removeTessera(node*, int);
 
-node* addToField(node*, tessera, side_t, vertical_t);
+node* addToField(node*, tessera, side_t, vertical_t, int);
 
 node* copyNodes(node*);
 
@@ -55,13 +55,13 @@ void free_nodes(node*);
 
 void printNodes(node*);
 
-void printCard(node*);
+int printCard(node*);
 
 void printText(node*, char*);
 
 void printHand(node*);
 
-void printField(node*);
+int printField(node*);
 
 void printStartingHand(node*);
 

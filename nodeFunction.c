@@ -156,7 +156,7 @@ void setPosField(node* head, node* field, side_t side, vertical_t vertical) {
 
 
 //
-node* addToField(node* field, tessera t, side_t side, vertical_t vertical) {
+node* addToField(node* field, tessera t, side_t side, vertical_t vertical, int row) {
     node* head = (node*)malloc(sizeof(node));
     head->me = t;
     
@@ -165,7 +165,7 @@ node* addToField(node* field, tessera t, side_t side, vertical_t vertical) {
         setPos(head, 0, 0, vertical?1:0, 1);
         return head;
     }
-    if(side == sx) {
+    if(side == sx && row == 0) {
         head->next = field;
         setPosField(head, field, side, vertical);
         return head;

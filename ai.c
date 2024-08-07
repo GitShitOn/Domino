@@ -88,7 +88,7 @@ int calcMove(node* field, node* hand, move currentMove, int depth) {
 
         //  Calcola miglior mossa
         int bestMoveScore = findBestMove(
-            addToField(fCopy, currentMove.t, currentMove.side, false),
+            addToField(fCopy, currentMove.t, currentMove.side, false, 0),   //  cambiare
             removeTessera(hCopy, currentMove.n),
             currentMove.score,
             (depth - 1)

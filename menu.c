@@ -50,6 +50,8 @@ void soloGame() {
     vertical_t verticalMove;
     int maxHand = 0;
     int n;
+    int depth = 0;
+    int row;
     side_t side;
     struct timespec ts;
     struct timespec tf;
@@ -63,11 +65,12 @@ void soloGame() {
         validMove = false;
 
         do {
+            row = 1;
             side = -1;
             verticalMove = false;
 
             if(field != NULL)
-                printField(field);
+                depth = printField(field);
             maxHand = printPossibleMoves(hand);
 
             // n = rand()%maxHand;printf("%d",n+1);side=rand()%1+1;       /*    <-----
@@ -98,21 +101,30 @@ void soloGame() {
                 if(c == 'y' || c == 'Y' || c == '1') 
                     verticalMove = true;
 
+            while(depth > 0 && row < 1 && row > depth) {
+                fflush(stdin);
+                printf("\nIn quale riga vuoi giocare la tessera?\nRiga: ");
+                scanf("%d", &row);
+                fflush(stdin);
+            }
+            --row;
+
             while(side != 0 && side != 1 && field != NULL) {
+                fflush(stdin);
                 printf("\nScegliere il lato [Sinistra(%d) | Destra(%d)]: ", sx, dx);
                 scanf("%d", &side);
                 fflush(stdin);
             }
             // */
             
-            if(isValidMove(field, peek, side))      //  aggiungere check verticale
+            if(isValidMove(field, peek, side))      //  aggiungere check verticale e row
                 validMove = true;
             else
                 printf("\nMossa non valida!\n");
 
         } while(!validMove);
 
-        makeMove(&field, &hand, (move){peek, n, -1, side, verticalMove});
+        makeMove(&field, &hand, (move){peek, n, -1, side, verticalMove, row});
 
         // field = addToField(field, peek, side);
         // hand = removeTessera(hand, n);

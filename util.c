@@ -124,6 +124,6 @@ void makeMove(node** field, node** hand, move bestMove) {
     }
 
     // aggiunta al campo e rimozione dalla mano
-    *field = addToField(*field, bestMove.t, bestMove.side, bestMove.vertical);
+    *field = addToField(*field, bestMove.t, bestMove.side, bestMove.vertical, bestMove.row);
     *hand = removeTessera(*hand, bestMove.n);
 }

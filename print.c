@@ -12,60 +12,93 @@ void printNodes(node* hand) {
 }
 
 //  test print formattato
-void printCard(node* hand) {
+int printCard(node* hand) {
+    if(!hand)
+        return 0;
     switch(hand->me.l_cell) {
         case jolly:
-            printf("[J|J] ");
+            printf("[J|J]");
             break;
         case plus_one:
-            printf("[Field +1] ");
+            printf("[Field +1]");
             break;
         case mirror_l:
-            printf("[Mirror] ");
+            printf("[Mirror]");
             break;
         default:
-            printf("[%d|%d] ", hand->me.l_cell, hand->me.r_cell);
+            printf("[%d|%d]", hand->me.l_cell, hand->me.r_cell);
             // printf("[%d(%d/%d)|%d(%d/%d)] ", hand->me.l_cell,hand->me.pos[0],hand->me.pos[1], hand->me.r_cell,hand->me.pos[2],hand->me.pos[3]);           // print debug posizioni
     }
+    return 5;
 }
 
-void printHalfCard(node* hand) {
+int printHalfCard(node* hand, bool top) {
     switch(hand->me.l_cell) {
         case jolly:
-            printf("[J| ");
+            if(top)
+                printf("[J:");
+            else
+                printf(":J]");
             break;
         default:
-            printf("[%d| ", hand->me.l_cell);
+            if(top)
+                printf("[%d:", hand->me.l_cell);
+            else
+                printf(":%d]", hand->me.r_cell);
 
     }
+    return 3;
 }
 
-void recursivePrint(node* n) {
+int recursivePrintLineForward(node* n, int cursPoint) {
+    if(n) {
+        cursPoint += printCard(n);
+        recursivePrintLineForward(n->next, cursPoint);
+    }
+    return cursPoint;
+}
+int recursivePrintLineReverse(node* n, int cursPoint) {
+    if(n) 
+       recursivePrintLineReverse(n->next, cursPoint);
+    for(int i = 0; i < n->me.pos[1]; i++)
+        printf(" ");
+    return cursPoint + printCard(n); 
+    
+} 
 
+int recursivePrint(node* n, int depth) {
+    node* head = n;
+    bool end = true;
+    int cursPoint = 0;
+    while(n) {
+        if(n->me.pos[0] != n->me.pos[2]) {
+            if(n->me.pos[2] == depth) {
+                cursPoint = recursivePrintLineReverse(n->down_l, cursPoint);
+                printHalfCard(n, false);
+                cursPoint += 3;
+                cursPoint = recursivePrintLineForward(n->down_r, cursPoint);
+            }
+            else {
+                printHalfCard(n, true);
+                cursPoint += 3;
+                end = false;
+            }
+        }
+        else if(n->me.pos[0] == depth) {
+            cursPoint += printCard(n);
+        }
+        n = n->next;
+    }
+    printf("\n");
+    if(end)
+        return depth;
+    return recursivePrint(head, depth+1);
 }
 
 // Stampa il campo
-void printField(node* field) {          // rifare ricorsiva
-    printf("\n%s", "Tavolo attuale");
-    int depth = 0;
-    int count = 0;
-    node* curr;
-    do {
-        curr = field;
-        while(curr) {
-            if(curr->me.pos[0] < curr->me.pos[2] && ) {
-                depth = curr->me.pos[2] > depth ? curr->me.pos[2] : depth;
-                printHalfCard(curr);
-            }
-            else if(curr->me.pos[0] < curr->me.pos[2]) {
-                recursivePrint(curr->down_l);
-
-            }
-            curr = curr->next;
-        }
-        printf("\n");
-        count++;
-    } while(count <= depth);
+int printField(node* field) {
+    printf("\n%s", "Tavolo attuale\n");
+    return recursivePrint(field, 0);
 }
 
 void printText(node* nodes, char* str) {
