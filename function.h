@@ -1,7 +1,7 @@
 #include "struct.c"
 
+
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -10,10 +10,14 @@
 #define dx 0
 #define sx 1
 #define AI_DEPTH 8.0
+
+#define normalCards 6
+#define specialCards 4
 #define jolly 0
 #define plus_one 11
 #define mirror_l 12
 #define mirror_r 21
+
 
 //  "menu.c"
 
@@ -40,7 +44,7 @@ tessera createTesseraValue(int, int);
 
 node* removeTessera(node*, int);
 
-node* addToField(node*, tessera, int);
+node* addToField(node*, tessera, side_t, vertical_t);
 
 node* copyNodes(node*);
 
@@ -50,6 +54,8 @@ void free_nodes(node*);
 //  "print.c"
 
 void printNodes(node*);
+
+void printCard(node*);
 
 void printText(node*, char*);
 

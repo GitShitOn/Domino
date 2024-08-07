@@ -66,14 +66,14 @@ node* createHandChallenge() {
 
 // Crea una tessera e la restituisce
 tessera createTessera() {
-    tessera t = {rand()%6+1, rand()%6+1};
+    tessera t = {rand()%normalCards+1, rand()%normalCards+1};
     return t;
 }
 
 // Crea una tessera e la restituisce
 tessera createTesseraSpecial() {
     tessera t;
-    switch((rand()%10) + 1) {
+    switch((rand()%(normalCards+specialCards)) + 1) {
         case 1: // jolly
             t = (tessera) {jolly, jolly};
             break;
@@ -84,7 +84,7 @@ tessera createTesseraSpecial() {
             t = (tessera) {mirror_l, mirror_r};
             break;
         default:    // tessere normali
-            t = (tessera){rand()%6+1, rand()%6+1};
+            t = createTessera();
             break;
     }
     return t;
@@ -135,16 +135,39 @@ node* removeTessera(node* hand, int n) {
     return head;
 }
 
+
+//  inplementare meglio (forse bastano 3 valori)
+//  position 1(left) row / position 2(right) position
+void setPos(node* head, int p1r, int p1p, int p2r, int p2p) {
+    head->me.pos[0] = p1r;
+    head->me.pos[1] = p1p;
+    head->me.pos[2] = p2r;
+    head->me.pos[3] = p2p;
+}
+
+void setPosField(node* head, node* field, side_t side, vertical_t vertical) {
+    if(side == sx)
+        setPos(head, field->me.pos[0], field->me.pos[1]-2, field->me.pos[2]+(vertical?1:0), field->me.pos[1]-(vertical?1:1));
+    else if(side == dx)
+        setPos(head, field->me.pos[0], field->me.pos[3]+1, field->me.pos[2]+(vertical?1:0), field->me.pos[3]+(vertical?1:2));
+    else
+        printf("DEBUG: setPosField()");
+}
+
+
 //
-node* addToField(node* field, tessera t, side_t side) {
+node* addToField(node* field, tessera t, side_t side, vertical_t vertical) {
     node* head = (node*)malloc(sizeof(node));
     head->me = t;
+    
     if(field == NULL) {
         head->next = NULL;
+        setPos(head, 0, 0, vertical?1:0, 1);
         return head;
     }
     if(side == sx) {
         head->next = field;
+        setPosField(head, field, side, vertical);
         return head;
     }
     else if(side == dx) {
@@ -152,11 +175,10 @@ node* addToField(node* field, tessera t, side_t side) {
         while(field->next != NULL)
             field = field->next;
         head->next = NULL;
+        setPosField(head, field, side, vertical);
         field->next = head;
         return fHead;
     }
-    // print_debug();
-    // printf("side: %d", side);
     return NULL;
 }
 

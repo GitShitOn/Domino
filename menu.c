@@ -47,7 +47,7 @@ void soloGame() {
     char c;
     bool fine = false;
     bool validMove = false;
-    bool validSwap;
+    vertical_t verticalMove;
     int maxHand = 0;
     int n;
     side_t side;
@@ -64,7 +64,7 @@ void soloGame() {
 
         do {
             side = -1;
-            validSwap = false;
+            verticalMove = false;
 
             if(field != NULL)
                 printField(field);
@@ -82,19 +82,21 @@ void soloGame() {
 
             peek = peekHand(hand, n);
 
-            while(!validSwap && peek.l_cell != peek.r_cell && peek.r_cell != mirror_r) {
+            if(peek.l_cell != peek.r_cell && peek.r_cell != mirror_r) {
                 fflush(stdin);
-                printf("\nGirare la tessera? [Y/n] o [1/0]: ");
+                printf("\nInvertire la tessera? [Y/n] o [1/0]: ");
                 scanf("%c", &c);
                 fflush(stdin);
-                if(c == 'y' || c == 'Y' || c == '1') {
+                if(c == 'y' || c == 'Y' || c == '1') 
                     peek = swapTessera(peek);
-                    validSwap = true;
-                }
-                // else if(c == 'n' || c == 'N' || c=='0')
-                else
-                    validSwap = true;
             }
+
+            fflush(stdin);
+            printf("\nGiocare in verticale la tessera? [Y/n]: ");
+            scanf("%c", &c);
+                fflush(stdin);
+                if(c == 'y' || c == 'Y' || c == '1') 
+                    verticalMove = true;
 
             while(side != 0 && side != 1 && field != NULL) {
                 printf("\nScegliere il lato [Sinistra(%d) | Destra(%d)]: ", sx, dx);
@@ -103,14 +105,14 @@ void soloGame() {
             }
             // */
             
-            if(isValidMove(field, peek, side))
+            if(isValidMove(field, peek, side))      //  aggiungere check verticale
                 validMove = true;
             else
                 printf("\nMossa non valida!\n");
 
         } while(!validMove);
 
-        makeMove(&field, &hand, (move){peek, n, -1, side});
+        makeMove(&field, &hand, (move){peek, n, -1, side, verticalMove});
 
         // field = addToField(field, peek, side);
         // hand = removeTessera(hand, n);

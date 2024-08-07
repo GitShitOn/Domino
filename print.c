@@ -4,10 +4,68 @@
 void printNodes(node* hand) {
     printf("\n");
     while(hand != NULL) {
-        printf("[%d|%d] ", hand->me.l_cell, hand->me.r_cell);
+        printCard(hand);
+        // printf("[%d(%d/%d)|%d(%d/%d)] ", hand->me.l_cell,hand->me.pos[0],hand->me.pos[1], hand->me.r_cell,hand->me.pos[2],hand->me.pos[3]);           // print debug posizioni
         hand = hand->next;
     }
     printf("\n");
+}
+
+//  test print formattato
+void printCard(node* hand) {
+    switch(hand->me.l_cell) {
+        case jolly:
+            printf("[J|J] ");
+            break;
+        case plus_one:
+            printf("[Field +1] ");
+            break;
+        case mirror_l:
+            printf("[Mirror] ");
+            break;
+        default:
+            printf("[%d|%d] ", hand->me.l_cell, hand->me.r_cell);
+            // printf("[%d(%d/%d)|%d(%d/%d)] ", hand->me.l_cell,hand->me.pos[0],hand->me.pos[1], hand->me.r_cell,hand->me.pos[2],hand->me.pos[3]);           // print debug posizioni
+    }
+}
+
+void printHalfCard(node* hand) {
+    switch(hand->me.l_cell) {
+        case jolly:
+            printf("[J| ");
+            break;
+        default:
+            printf("[%d| ", hand->me.l_cell);
+
+    }
+}
+
+void recursivePrint(node* n) {
+
+}
+
+// Stampa il campo
+void printField(node* field) {          // rifare ricorsiva
+    printf("\n%s", "Tavolo attuale");
+    int depth = 0;
+    int count = 0;
+    node* curr;
+    do {
+        curr = field;
+        while(curr) {
+            if(curr->me.pos[0] < curr->me.pos[2] && ) {
+                depth = curr->me.pos[2] > depth ? curr->me.pos[2] : depth;
+                printHalfCard(curr);
+            }
+            else if(curr->me.pos[0] < curr->me.pos[2]) {
+                recursivePrint(curr->down_l);
+
+            }
+            curr = curr->next;
+        }
+        printf("\n");
+        count++;
+    } while(count <= depth);
 }
 
 void printText(node* nodes, char* str) {
@@ -17,11 +75,6 @@ void printText(node* nodes, char* str) {
 
 void printHand(node* hand) {
     printText(hand, "La tua mano:");
-}
-
-// Stampa il campo
-void printField(node* field) {
-    printText(field, "Tavolo attuale");
 }
 
 void printStartingHand(node* hand) {
@@ -35,16 +88,18 @@ int printPossibleMoves(node* hand) {
 
         while(hand != NULL) {
             count++;
-            printf("\n%d - [%d|%d]", count, hand->me.l_cell, hand->me.r_cell);
+            printf("\n%d - ", count);
+            printCard(hand);
+            // printf("\n%d - [%d|%d]", count, hand->me.l_cell, hand->me.r_cell);
             switch(hand->me.l_cell) {
                 case jolly:
-                    printf("\t(Jolly)");
+                    printf("\t(Jolly!)");
                     break;
                 case plus_one:
-                    printf("\t(Field +1)");
+                    printf("\t(Aumenta di 1 il valore di tutte le tessere sul campo) (es.:[3|6]->[4|1])");
                     break;
                 case mirror_l:
-                    printf("\t(Mirror)");
+                    printf("\t(Specchia la carta più esterna dal lato che viene giocata)");
                     break;
             }
             hand = hand->next;
@@ -55,7 +110,7 @@ int printPossibleMoves(node* hand) {
 }
 
 void printMossa(move mossa) {
-    printf("\nGiocata la tessera [%d|%d] %s a %s!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side==dx?"dx":"sx");
+    printf("\nGiocata la tessera [%d|%d] a %s!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side==dx?"dx":"sx");
     // printf("\nGiocata la tessera [%d|%d] a %d!\n", mossa.t.l_cell, mossa.t.r_cell, mossa.side);
 }
 

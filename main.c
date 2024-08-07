@@ -6,6 +6,7 @@ int main(int args, char** argv) {
 
     srand(time(NULL));
 
+    /*
     // challenge(); return 0;   //  debug x challenge
 
     // controllo se challenge
@@ -15,6 +16,7 @@ int main(int args, char** argv) {
             return 0;
         }
     }
+    */
 
     //  avvio menu per la partita
     menu();
